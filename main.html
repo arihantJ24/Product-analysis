@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spendflo — Investor-Grade Product & Competitive Analysis</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0f12;
+            --bg2: #141720;
+            --bg3: #1c2030;
+            --card: #1a1e2e;
+            --border: rgba(255, 255, 255, 0.07);
+            --border2: rgba(255, 255, 255, 0.12);
+            --text: #e8eaf0;
+            --text2: #9ba3b8;
+            --text3: #6b7394;
+            --accent: #5b73ff;
+            --accent2: #3d52cc;
+            --green: #1dd17a;
+            --amber: #f5a623;
+            --red: #f05252;
+            --teal: #36d9c9;
+            --purple: #b36bff;
+            --coral: #ff6b6b;
+            --gold: #f5c842;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        /* ─── HEADER ─── */
+        .hero {
+            background: linear-gradient(135deg, #0a0d18 0%, #111728 40%, #0f1424 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 60px 48px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(91, 115, 255, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: 30%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(54, 217, 201, 0.07) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .label {
+            display: inline-block;
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(91, 115, 255, 0.12);
+            border: 1px solid rgba(91, 115, 255, 0.25);
+            border-radius: 4px;
+            padding: 3px 10px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 48px;
+            line-height: 1.15;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 12px;
+            max-width: 700px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero p {
+            color: var(--text2);
+            font-size: 16px;
+            max-width: 600px;
+            margin-bottom: 32px;
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .meta-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text3);
+            font-family: 'DM Mono', monospace;
+        }
+
+        .meta-chip span.dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        /* ─── LAYOUT ─── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .toc {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 0 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .toc-inner {
+            display: inline-flex;
+            gap: 0;
+        }
+
+        .toc a {
+            display: inline-block;
+            padding: 14px 18px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text3);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.02em;
+        }
+
+        .toc a:hover {
+            color: var(--text);
+            border-bottom-color: var(--accent);
+        }
+
+        /* ─── SECTION ─── */
+        section {
+            padding: 64px 48px;
+            border-bottom: 1px solid var(--border);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 32px;
+            font-weight: 400;
+            color: #fff;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 28px 0 10px;
+            letter-spacing: 0.01em;
+        }
+
+        h3:first-child {
+            margin-top: 0;
+        }
+
+        p {
+            color: var(--text2);
+            margin-bottom: 12px;
+        }
+
+        strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ─── CARDS ─── */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .card-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* ─── STAT CARDS ─── */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px 20px;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            color: #fff;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .num.green {
+            color: var(--green);
+        }
+
+        .stat-card .num.accent {
+            color: var(--accent);
+        }
+
+        .stat-card .num.amber {
+            color: var(--amber);
+        }
+
+        .stat-card .lbl {
+            font-size: 11px;
+            color: var(--text3);
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* ─── BULLETS ─── */
+        .bullet-list {
+            list-style: none;
+        }
+
+        .bullet-list li {
+            padding: 8px 0 8px 22px;
+            position: relative;
+            color: var(--text2);
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .bullet-list li:last-child {
+            border-bottom: none;
+        }
+
+        .bullet-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 17px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .bullet-list li strong {
+            color: var(--text);
+        }
+
+        /* ─── TAGS / BADGES ─── */
+        .badge {
+            display: inline-block;
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 4px;
+            padding: 2px 8px;
+        }
+
+        .badge.green {
+            background: rgba(29, 209, 122, 0.12);
+            color: var(--green);
+            border: 1px solid rgba(29, 209, 122, 0.2);
+        }
+
+        .badge.amber {
+            background: rgba(245, 166, 35, 0.12);
+            color: var(--amber);
+            border: 1px solid rgba(245, 166, 35, 0.2);
+        }
+
+        .badge.red {
+            background: rgba(240, 82, 82, 0.12);
+            color: var(--red);
+            border: 1px solid rgba(240, 82, 82, 0.2);
+        }
+
+        .badge.accent {
+            background: rgba(91, 115, 255, 0.12);
+            color: var(--accent);
+            border: 1px solid rgba(91, 115, 255, 0.2);
+        }
+
+        .badge.teal {
+            background: rgba(54, 217, 201, 0.12);
+            color: var(--teal);
+            border: 1px solid rgba(54, 217, 201, 0.2);
+        }
+
+        .badge.purple {
+            background: rgba(179, 107, 255, 0.12);
+            color: var(--purple);
+            border: 1px solid rgba(179, 107, 255, 0.2);
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            background: var(--bg3);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            font-family: 'DM Mono', monospace;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        tbody td {
+            padding: 12px 16px;
+            color: var(--text2);
+            vertical-align: top;
+        }
+
+        tbody td:first-child {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        td .score {
+            display: flex;
+            gap: 3px;
+        }
+
+        td .score .pip {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: var(--border2);
+        }
+
+        td .score .pip.on {
+            background: var(--accent);
+        }
+
+        td .score .pip.on.g {
+            background: var(--green);
+        }
+
+        /* ─── PERSONA ─── */
+        .persona {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .persona .name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .persona .title {
+            font-size: 11px;
+            color: var(--accent);
+            font-family: 'DM Mono', monospace;
+            margin-bottom: 10px;
+        }
+
+        /* ─── JOURNEY ─── */
+        .journey {
+            display: flex;
+            gap: 0;
+            margin-top: 28px;
+            overflow-x: auto;
+        }
+
+        .journey-step {
+            flex: 1;
+            min-width: 160px;
+            padding: 20px 16px;
+            background: var(--bg3);
+            border-top: 3px solid var(--border2);
+            position: relative;
+        }
+
+        .journey-step:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .journey-step:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .journey-step.active {
+            border-top-color: var(--accent);
+            background: rgba(91, 115, 255, 0.06);
+        }
+
+        .journey-step .stage {
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text3);
+            margin-bottom: 8px;
+        }
+
+        .journey-step.active .stage {
+            color: var(--accent);
+        }
+
+        .journey-step ul {
+            list-style: none;
+        }
+
+        .journey-step ul li {
+            font-size: 12px;
+            color: var(--text2);
+            padding: 3px 0;
+        }
+
+        /* ─── SWOT ─── */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-top: 24px;
+        }
+
+        .swot-cell {
+            padding: 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .swot-cell:nth-child(odd) {
+            border-right: 1px solid var(--border);
+        }
+
+        .swot-cell:nth-child(3),
+        .swot-cell:nth-child(4) {
+            border-bottom: none;
+        }
+
+        .swot-cell .swot-label {
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .swot-cell.s .swot-label {
+            color: var(--green);
+        }
+
+        .swot-cell.w .swot-label {
+            color: var(--red);
+        }
+
+        .swot-cell.o .swot-label {
+            color: var(--amber);
+        }
+
+        .swot-cell.t .swot-label {
+            color: var(--purple);
+        }
+
+        /* ─── IMPROVEMENT CARD ─── */
+        .improve-card {
+            display: flex;
+            gap: 20px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            align-items: flex-start;
+        }
+
+        .improve-card .num-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(91, 115, 255, 0.15);
+            border: 1px solid rgba(91, 115, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            color: var(--accent);
+            flex-shrink: 0;
+            font-weight: 500;
+        }
+
+        .improve-card.quick .num-circle {
+            background: rgba(29, 209, 122, 0.12);
+            border-color: rgba(29, 209, 122, 0.25);
+            color: var(--green);
+        }
+
+        .improve-card.bold .num-circle {
+            background: rgba(179, 107, 255, 0.12);
+            border-color: rgba(179, 107, 255, 0.25);
+            color: var(--purple);
+        }
+
+        .improve-card .content {
+            flex: 1;
+        }
+
+        .improve-card .content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .improve-card .content p {
+            font-size: 13px;
+            color: var(--text2);
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        /* ─── COMPETITOR CARD ─── */
+        .comp-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 22px 24px;
+        }
+
+        .comp-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .comp-card .sub {
+            font-size: 11px;
+            color: var(--text3);
+            font-family: 'DM Mono', monospace;
+            margin-bottom: 14px;
+        }
+
+        .comp-row {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            margin-bottom: 6px;
+            align-items: baseline;
+        }
+
+        .comp-row .ck {
+            color: var(--text3);
+            min-width: 80px;
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .comp-row .cv {
+            color: var(--text2);
+            flex: 1;
+        }
+
+        .pros-cons {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .pros-cons>div {
+            flex: 1;
+            font-size: 11px;
+        }
+
+        .pros-cons .heading {
+            color: var(--text3);
+            font-family: 'DM Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .pros-cons li {
+            padding: 2px 0 2px 14px;
+            position: relative;
+            color: var(--text2);
+        }
+
+        .pros-cons li::before {
+            position: absolute;
+            left: 0;
+        }
+
+        .pros-cons .pros li::before {
+            content: '+';
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .pros-cons .cons li::before {
+            content: '−';
+            color: var(--red);
+        }
+
+        /* ─── MARKET MAP ─── */
+        .market-map {
+            position: relative;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 24px;
+            height: 340px;
+        }
+
+        .axis-h {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            height: 1px;
+            background: var(--border2);
+        }
+
+        .axis-v {
+            position: absolute;
+            top: 40px;
+            bottom: 40px;
+            left: 50%;
+            width: 1px;
+            background: var(--border2);
+        }
+
+        .axis-lbl {
+            position: absolute;
+            font-size: 10px;
+            font-family: 'DM Mono', monospace;
+            color: var(--text3);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+            text-align: center;
+            line-height: 1.2;
+            cursor: default;
+            transition: transform 0.2s;
+        }
+
+        .bubble:hover {
+            transform: scale(1.08);
+            z-index: 10;
+        }
+
+        /* ─── GROWTH LOOPS ─── */
+        .loop-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+        .loop-item:last-child {
+            border-bottom: none;
+        }
+
+        .loop-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ─── TAM ─── */
+        .tam-bar {
+            margin-top: 24px;
+        }
+
+        .tam-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+
+        .tam-row .tam-lbl {
+            font-size: 11px;
+            font-family: 'DM Mono', monospace;
+            color: var(--text3);
+            width: 36px;
+            text-transform: uppercase;
+        }
+
+        .tam-row .tam-track {
+            flex: 1;
+            height: 10px;
+            background: var(--border);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .tam-row .tam-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .tam-row .tam-val {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            width: 80px;
+        }
+
+        footer {
+            padding: 40px 48px;
+            border-top: 1px solid var(--border);
+            color: var(--text3);
+            font-size: 12px;
+            font-family: 'DM Mono', monospace;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 40px 24px 36px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            section {
+                padding: 48px 24px;
+            }
+
+            .toc {
+                padding: 0 24px;
+            }
+
+            .swot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .swot-cell:nth-child(odd) {
+                border-right: none;
+            }
+
+            .swot-cell:nth-child(3) {
+                border-bottom: 1px solid var(--border);
+            }
+
+            footer {
+                padding: 32px 24px;
+            }
+
+            .card-2,
+            .card-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="label">Investor-Grade Analysis · 2025–26</div>
+        <h1>Spendflo: <em>Deep Dive</em><br>Product & Competitive Intelligence</h1>
+        <p>A full-stack teardown — product strategy, business model, competitive landscape, market positioning, and
+            PM-level improvement roadmap.</p>
+        <div class="meta-row">
+            <div class="meta-chip"><span class="dot"></span> Live data synthesised March 2026</div>
+            <div class="meta-chip">Category: AI Procurement / SaaS Spend Management</div>
+            <div class="meta-chip">Stage: Series A → Growth</div>
+        </div>
+    </div>
+
+    <!-- TOC -->
+    <nav class="toc">
+        <div class="toc-inner">
+            <a href="#product">1 · Product</a>
+            <a href="#breakdown">2 · Breakdown</a>
+            <a href="#business">3 · Business Model</a>
+            <a href="#competitors">4 · Competitors</a>
+            <a href="#comparison">5 · Comparison</a>
+            <a href="#market">6 · Market</a>
+            <a href="#growth">7 · Growth</a>
+            <a href="#gaps">8 · Gaps</a>
+            <a href="#swot">9 · SWOT</a>
+            <a href="#improvements">10 · Improvements</a>
+        </div>
+    </nav>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 1: PRODUCT UNDERSTANDING -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="product">
+        <div class="section-label">01 · Product Understanding</div>
+        <h2>What is Spendflo?</h2>
+
+        <p>Spendflo is an <strong>AI-native, end-to-end procurement platform</strong> built specifically for modern tech
+            companies managing complex SaaS vendor relationships. Founded in 2020 (San Francisco/India-based) by
+            Siddharth Sridharan, Ajay Vardhan, and Rajiv Ramanan, the company raised <strong>$15.4M</strong> across Seed
+            (2022) and Series A (2023) rounds from Accel, Prosus Ventures, and BoldCap — with a follow-on unattributed
+            VC round in June 2025.</p>
+        <p>At its core, Spendflo combines <strong>software automation + human expert negotiators</strong> to help
+            mid-market companies bring structure, visibility, and cost control to how they buy and renew software. It
+            has evolved from a SaaS spend tracker into a full <em>"Intake-to-Procure"</em> platform with AI agents
+            (Flash AI) layered across every workflow step.</p>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="num green">$15.4M</div>
+                <div class="lbl">Total Raised</div>
+            </div>
+            <div class="stat-card">
+                <div class="num accent">~140</div>
+                <div class="lbl">Employees</div>
+            </div>
+            <div class="stat-card">
+                <div class="num amber">12x</div>
+                <div class="lbl">Claimed ROI</div>
+            </div>
+            <div class="stat-card">
+                <div class="num green">2020</div>
+                <div class="lbl">Founded</div>
+            </div>
+            <div class="stat-card">
+                <div class="num accent">$15M+</div>
+                <div class="lbl">Savings Delivered</div>
+            </div>
+            <div class="stat-card">
+                <div class="num green">SOC2</div>
+                <div class="lbl">Certified</div>
+            </div>
+        </div>
+
+        <h3>Core Value Proposition</h3>
+        <p><strong>"Stop managing procurement in email threads and spreadsheets. Get a single AI-powered system that
+                handles intake, approval workflows, vendor risk, contract management, and expert-led negotiations — with
+                guaranteed savings."</strong></p>
+        <p>Spendflo's key moat is the <strong>software + services hybrid</strong>: unlike pure-software competitors,
+            they embed procurement experts who actively negotiate with vendors on your behalf — backed by proprietary
+            pricing benchmark data. This creates a measurable ROI claim that pure-software tools can't easily replicate.
+        </p>
+
+        <h3>Target Personas</h3>
+        <div class="card-grid card-3">
+            <div class="persona">
+                <div class="name">VP Finance / CFO</div>
+                <div class="title">Primary Buyer</div>
+                <ul class="bullet-list">
+                    <li>Wants spend visibility and budget control</li>
+                    <li>Needs to prove ROI to the board</li>
+                    <li>Frustrated by rogue SaaS purchases</li>
+                    <li>Owns the renewal calendar risk</li>
+                </ul>
+            </div>
+            <div class="persona">
+                <div class="name">Procurement Manager / CPO</div>
+                <div class="title">Primary Champion</div>
+                <ul class="bullet-list">
+                    <li>Wants workflow automation &amp; compliance</li>
+                    <li>Needs vendor onboarding speed</li>
+                    <li>Drowning in manual approvals</li>
+                    <li>Lacks benchmark pricing data</li>
+                </ul>
+            </div>
+            <div class="persona">
+                <div class="name">IT / Security Lead</div>
+                <div class="title">Secondary User</div>
+                <ul class="bullet-list">
+                    <li>Needs TPRM (vendor risk reviews)</li>
+                    <li>Concerned about shadow IT proliferation</li>
+                    <li>Wants license usage visibility</li>
+                    <li>SOC2 / compliance gate-keeper</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Jobs-to-be-Done (Functional + Emotional)</h3>
+        <div class="card-grid">
+            <div class="card">
+                <h4 style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;">FUNCTIONAL JTBD</h4>
+                <ul class="bullet-list">
+                    <li>Centralise all SaaS contracts and renewal dates</li>
+                    <li>Automate intake requests → approval workflows</li>
+                    <li>Identify unused / duplicate SaaS licences</li>
+                    <li>Negotiate vendor contracts at lower prices</li>
+                    <li>Pass security/compliance vendor reviews faster</li>
+                    <li>Generate POs, track payables, match invoices</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;">EMOTIONAL JTBD</h4>
+                <ul class="bullet-list">
+                    <li><strong>CFO:</strong> "I want to feel in control of spend, not surprised"</li>
+                    <li><strong>Procurement:</strong> "I don't want to be the bottleneck for every purchase"</li>
+                    <li><strong>Legal:</strong> "I want contracts to reach me already structured, not as email
+                        attachments"</li>
+                    <li><strong>IT:</strong> "I want shadow IT discovered before it becomes a breach"</li>
+                    <li><strong>Requester:</strong> "I just want to know where my request is"</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 2: PRODUCT BREAKDOWN -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="breakdown">
+        <div class="section-label">02 · Product Breakdown</div>
+        <h2>Feature Architecture & User Journey</h2>
+
+        <h3>Core Product Modules</h3>
+        <div class="card-grid card-2">
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge accent">Core</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Intake-to-Procure</h4>
+                <p style="font-size:13px;">Conversational intake where employees type what they need in natural
+                    language. Flash AI converts it to a structured procurement request, triages it, and routes to the
+                    right workflow. Eliminates email chains.</p>
+            </div>
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge accent">Core</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Workflow Orchestration</h4>
+                <p style="font-size:13px;">No-code workflow builder that auto-routes approvals across Finance (ERP),
+                    Legal (CLM), IT (ITSM), and Security. Real-time syncs with NetSuite, Coupa, DocuSign, Ironclad (100+
+                    integrations).</p>
+            </div>
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge teal">Platform</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Vendor & Contract Management
+                </h4>
+                <p style="font-size:13px;">Centralised vendor records, contract storage, renewal alerts, and automated
+                    pre-fills. Includes TPRM (Third-Party Risk Management) with compliance documentation centralisation.
+                </p>
+            </div>
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge teal">Platform</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Usage Analytics & PO Management
+                </h4>
+                <p style="font-size:13px;">SaaS licence utilisation tracking, shadow IT detection (12% eliminated per
+                    customer testimonial), PO creation and reconciliation, and conversational reporting via Flash AI
+                    agents.</p>
+            </div>
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge purple">Flash AI</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">AI Agents Suite (Flash AI)</h4>
+                <p style="font-size:13px;">Three specialised agents: <strong>Contract Analyst</strong> (extracts
+                    clauses, flags risk), <strong>Payables Agent</strong> (invoice matching, AP automation), and
+                    <strong>Procurement Analyst</strong> (spend insights, conversational querying).
+                </p>
+            </div>
+            <div class="card">
+                <div style="margin-bottom:10px;"><span class="badge amber">Add-on</span></div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Managed Services / PaaS</h4>
+                <p style="font-size:13px;">The services layer: dedicated procurement experts who handle negotiations,
+                    benchmark pricing against real deal data, conduct vendor audits, and act as an outsourced
+                    procurement function. This is Spendflo's margin-heavy differentiator.</p>
+            </div>
+        </div>
+
+        <h3>User Journey</h3>
+        <div class="journey">
+            <div class="journey-step">
+                <div class="stage">Awareness</div>
+                <ul>
+                    <li>CFO googles "SaaS spend management"</li>
+                    <li>Referral from finance community</li>
+                    <li>Content / benchmark reports</li>
+                </ul>
+            </div>
+            <div class="journey-step active">
+                <div class="stage">Activation</div>
+                <ul>
+                    <li>Free savings analysis call</li>
+                    <li>Demo → quick-win audit</li>
+                    <li>Data ingestion (integrations)</li>
+                </ul>
+            </div>
+            <div class="journey-step">
+                <div class="stage">Adoption</div>
+                <ul>
+                    <li>Workflows live in first 2 weeks</li>
+                    <li>Vendor data imported</li>
+                    <li>First negotiation win</li>
+                </ul>
+            </div>
+            <div class="journey-step">
+                <div class="stage">Retention</div>
+                <ul>
+                    <li>Renewal calendar = sticky</li>
+                    <li>Flash AI queries daily</li>
+                    <li>Approval workflows embedded</li>
+                </ul>
+            </div>
+            <div class="journey-step">
+                <div class="stage">Expansion</div>
+                <ul>
+                    <li>More teams added (Legal, IT)</li>
+                    <li>Add-on: negotiations service</li>
+                    <li>PaaS upsell for lean teams</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>UX / UI Observations</h3>
+        <div class="card-grid card-2">
+            <div class="card">
+                <h4 style="color:var(--green);font-size:13px;margin-bottom:10px;">✓ Strengths</h4>
+                <ul class="bullet-list">
+                    <li>Conversational intake is a genuine UX leap — reduces friction for requesters</li>
+                    <li>Clean, modern web UI with clear SaaS-native design language</li>
+                    <li>Role-segmented product pages (Finance, Procurement, Legal, IT, Stakeholders)</li>
+                    <li>Strong onboarding — white-glove, no consulting fees</li>
+                    <li>AI agents positioned as "autopilot", not buried features</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="color:var(--red);font-size:13px;margin-bottom:10px;">✗ Weaknesses</h4>
+                <ul class="bullet-list">
+                    <li>No public pricing — full sales-led friction before any number is disclosed</li>
+                    <li>No self-serve trial or freemium; high barrier to evaluation</li>
+                    <li>Mobile app absent — procurement managers need mobile approvals</li>
+                    <li>Flash AI brand is distinct from the platform — creates navigation confusion</li>
+                    <li>Testimonials lean heavily on US enterprise; India-market social proof thin</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Key Differentiators</h3>
+        <ul class="bullet-list">
+            <li><strong>Software + Expert Services Hybrid</strong> — Not just SaaS; includes actual human negotiators.
+                Creates ROI proof competitors can't match on software alone.</li>
+            <li><strong>Conversational Intake (AI-native)</strong> — Natural language procurement requests reduce
+                employee friction drastically; newer than competitors who retrofit this.</li>
+            <li><strong>Cross-team Platform</strong> — Simultaneously serves Finance, Procurement, Legal, IT, and
+                Stakeholders from one data layer — competitors tend to serve only 1–2 teams.</li>
+            <li><strong>Pricing Benchmark Data</strong> — Proprietary SaaS pricing intel used in negotiations, a data
+                moat that grows with each deal.</li>
+            <li><strong>India-origin global play</strong> — Significant cost advantage vs US-native competitors; enables
+                a competitive price point at similar feature depth.</li>
+        </ul>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 3: BUSINESS MODEL -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="business">
+        <div class="section-label">03 · Business Model Analysis</div>
+        <h2>How Spendflo Makes Money</h2>
+
+        <div class="card-grid card-3">
+            <div class="card">
+                <div class="badge accent" style="margin-bottom:12px;">Primary</div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Platform SaaS Subscription</h4>
+                <p style="font-size:13px;">Annual/multi-year SLA contracts priced by team size or spend volume.
+                    Estimated ACV range: <strong>$15K–$80K/yr</strong> for mid-market. Includes white-glove
+                    implementation, integrations, data migration — no consulting fee.</p>
+            </div>
+            <div class="card">
+                <div class="badge amber" style="margin-bottom:12px;">High Margin</div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Managed Services / PaaS</h4>
+                <p style="font-size:13px;">Procurement-as-a-Service add-on where Spendflo's team acts as an outsourced
+                    procurement function. Pricing likely % of spend managed or a fixed retainer. Margin-heavy if
+                    delivery is AI-assisted.</p>
+            </div>
+            <div class="card">
+                <div class="badge teal" style="margin-bottom:12px;">Upsell</div>
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:8px;">Negotiation Services</h4>
+                <p style="font-size:13px;">Expert-led SaaS vendor negotiations on a performance or retainer basis. The
+                    claimed 12x ROI is anchored on this. Drives expansion revenue within existing accounts and serves as
+                    a conversion tool for new ones.</p>
+            </div>
+        </div>
+
+        <h3>Pricing Strategy</h3>
+        <p>Spendflo uses a <strong>fully opaque, sales-led pricing model</strong> — no public tiers, no freemium, no
+            self-serve. The "Get a Free Savings Analysis" CTA is the funnel entry. This is strategic: it allows custom
+            packaging, avoids price anchoring by competitors, and keeps deal sizes large. The downside is a high barrier
+            for bottom-up adoption.</p>
+        <p>Pricing levers are <strong>team size</strong> (employee count) and <strong>spend under management</strong>
+            volume — both rational metrics for the buyer who cares about per-employee SaaS cost efficiency.</p>
+
+        <h3>Unit Economics Hypothesis</h3>
+        <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(160px,1fr));">
+            <div class="stat-card">
+                <div class="num accent">$30–80K</div>
+                <div class="lbl">Est. ACV Range</div>
+            </div>
+            <div class="stat-card">
+                <div class="num green">12–18mo</div>
+                <div class="lbl">Est. Sales Cycle</div>
+            </div>
+            <div class="stat-card">
+                <div class="num amber">&gt;85%</div>
+                <div class="lbl">Net Revenue Retention (est.)</div>
+            </div>
+            <div class="stat-card">
+                <div class="num accent">~24mo</div>
+                <div class="lbl">CAC Payback (est.)</div>
+            </div>
+            <div class="stat-card">
+                <div class="num green">$15.2M</div>
+                <div class="lbl">Est. ARR (Latka 2025)</div>
+            </div>
+            <div class="stat-card">
+                <div class="num amber">Scaling</div>
+                <div class="lbl">Monetisation Maturity</div>
+            </div>
+        </div>
+
+        <h3>Cost Drivers</h3>
+        <ul class="bullet-list">
+            <li><strong>Procurement expert headcount</strong> — the services layer is the biggest cost; AI can reduce
+                but not eliminate this at current scale</li>
+            <li><strong>Enterprise sales team</strong> — sales-led motion requires AEs, SEs, and a heavy CS layer for
+                implementation</li>
+            <li><strong>AI infrastructure</strong> — Flash AI agent compute costs; LLM API spend per contract analysed
+                or request processed</li>
+            <li><strong>Integrations maintenance</strong> — 100+ native integrations have ongoing engineering upkeep
+                cost</li>
+            <li><strong>India-US operations</strong> — dual-geo model creates timezone and coordination overhead but
+                reduces total labour cost</li>
+        </ul>
+
+        <p><strong>Monetisation Maturity: Scaling.</strong> Spendflo has moved past early-stage product-market fit into
+            a structured scaling motion — it has clear ICP, repeatable sales process, and a Series A behind it with a
+            follow-on in 2025. However, it is not yet at "optimised" stage (no self-serve, no usage-based pricing, no
+            public pricing transparency).</p>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 4: COMPETITIVE LANDSCAPE -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="competitors">
+        <div class="section-label">04 · Competitive Landscape</div>
+        <h2>Direct & Indirect Competitors</h2>
+
+        <h3>Direct Competitors</h3>
+        <div class="card-grid card-2">
+
+            <div class="comp-card">
+                <h4>Zip</h4>
+                <div class="sub">Procurement Orchestration · US · $100M+ raised</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">Enterprise intake orchestration +
+                        P2P, 50+ AI agents</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">Large enterprises (1,000+
+                        employees)</span></div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">$36K+ / year starter; enterprise
+                        custom</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">Pure SaaS, no managed services
+                        layer</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>Much larger brand / enterprise credibility</li>
+                            <li>50+ AI agents (more mature AI story)</li>
+                            <li>Zip+Vendr pricing intelligence partnership</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>Far more expensive; SMB-hostile</li>
+                            <li>No managed services / negotiation layer</li>
+                            <li>Complex for lean procurement teams</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <h4>Vendr</h4>
+                <div class="sub">SaaS Buying Platform · US · $156M raised</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">SaaS negotiation &amp; pricing
+                        intelligence</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">Mid-market to enterprise;
+                        finance-led</span></div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">$36K+/yr; takes supplier
+                        commissions (contested)</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">Marketplace + negotiation services +
+                        benchmarks</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>$15B+ in SaaS spend data (unmatched data moat)</li>
+                            <li>Vendr/Zip partnership = platform + data combo</li>
+                            <li>Strong brand in the US market</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>Expensive for what's delivered (user feedback)</li>
+                            <li>Limited workflow / intake / TPRM depth</li>
+                            <li>Takes supplier commissions (conflict of interest perception)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <h4>Tropic</h4>
+                <div class="sub">Intelligent Spend Management · US · $67M raised</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">Full procurement suite + guaranteed
+                        savings</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">Mid-market tech companies</span>
+                </div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">$10K (supplier intel) → $22K (full
+                        ISM) / yr</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">Tiered SaaS; does not take supplier
+                        commissions</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>Transparent pricing (lower barrier to try)</li>
+                            <li>Non-commission model (trust advantage)</li>
+                            <li>Handles non-SaaS spend too</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>AI rollout still in beta for many features</li>
+                            <li>Mobile functionality weak</li>
+                            <li>Less expert-led negotiation depth vs Spendflo PaaS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <h4>Vertice</h4>
+                <div class="sub">SaaS &amp; Cloud Spend Optimisation · UK · Well-funded</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">SaaS + cloud procurement + savings
+                        guarantee</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">Mid-market; strong EMEA
+                        presence</span></div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">% of guaranteed savings
+                        model</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">Aligned-incentive pricing; only
+                        negotiates SaaS</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>Savings-based pricing aligns incentives (low risk for buyer)</li>
+                            <li>Strong EMEA / EU compliance knowledge</li>
+                            <li>Cloud spend management (cloud + SaaS combined)</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>Only negotiates SaaS (not full-procurement scope)</li>
+                            <li>Weak intake / workflow orchestration layer</li>
+                            <li>Opaque actual cost structure</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <h4>Zluri</h4>
+                <div class="sub">SaaS Management Platform · India · $34M raised</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">SaaS discovery, governance &amp;
+                        access management</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">IT and Security teams at mid-market
+                        companies</span></div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">Undisclosed; likely $15K–$50K
+                        ACV</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">SaaS-only; no managed
+                        services</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>IT-native (user provisioning, RBAC, JIT access)</li>
+                            <li>Shadow IT &amp; app discovery is deeper</li>
+                            <li>India-first brand; strong domestic trust</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>No procurement intake / workflow orchestration</li>
+                            <li>No managed negotiation services</li>
+                            <li>Weaker finance/CFO-facing features</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comp-card">
+                <h4>Sastrify</h4>
+                <div class="sub">SaaS Procurement · Germany · €20M raised</div>
+                <div class="comp-row"><span class="ck">Focus</span><span class="cv">SaaS management + negotiations for
+                        EU companies</span></div>
+                <div class="comp-row"><span class="ck">Target</span><span class="cv">Mid-market; strong DACH/EU
+                        footprint</span></div>
+                <div class="comp-row"><span class="ck">Pricing</span><span class="cv">Undisclosed; similar tier to
+                        Spendflo</span></div>
+                <div class="comp-row"><span class="ck">Model</span><span class="cv">SaaS + expert procurement team
+                        (similar to Spendflo)</span></div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <div class="heading">vs Spendflo</div>
+                        <ul>
+                            <li>GDPR-native; strong EU compliance positioning</li>
+                            <li>Similar hybrid model — direct strategic overlap</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <ul>
+                            <li>Limited North American presence / brand</li>
+                            <li>Less AI-native; older workflow engine</li>
+                            <li>Smaller funding base limits product velocity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Indirect Competitors</h3>
+        <div class="card-grid card-3">
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">Ramp</h4>
+                <span class="badge green">Indirect</span>
+                <p style="font-size:13px;margin-top:10px;">Finance automation + corporate cards + basic procurement.
+                    $8.1B valuation. Offers SaaS negotiation as a feature, not a core product. Competes on breadth;
+                    Spendflo competes on depth.</p>
+            </div>
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">Coupa</h4>
+                <span class="badge amber">Legacy</span>
+                <p style="font-size:13px;margin-top:10px;">Enterprise P2P / spend management. Complex, expensive,
+                    implementation-heavy. Spendflo actually integrates with Coupa, positioning as a "layer on top" for
+                    SaaS-specific procurement.</p>
+            </div>
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">ServiceNow / Jira</h4>
+                <span class="badge red">Displacement Risk</span>
+                <p style="font-size:13px;margin-top:10px;">Large IT teams use ITSM tools as informal procurement request
+                    channels. Spendflo must displace or integrate with these workflows to win IT team buy-in.</p>
+            </div>
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">Zylo</h4>
+                <span class="badge teal">Adjacent</span>
+                <p style="font-size:13px;margin-top:10px;">SaaS management platform with negotiation add-on. Marquee
+                    customers (Salesforce, GitHub). More mature product; less AI-native. Targets
+                    CIO/software-asset-manager persona.</p>
+            </div>
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">Spreadsheets / Email</h4>
+                <span class="badge red">Status Quo</span>
+                <p style="font-size:13px;margin-top:10px;">The real incumbent. 60–70% of Spendflo's TAM still manages
+                    SaaS procurement via Google Sheets and email. This is both the biggest opportunity and the biggest
+                    education burden.</p>
+            </div>
+            <div class="card">
+                <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;">CloudEagle.ai</h4>
+                <span class="badge purple">Emerging</span>
+                <p style="font-size:13px;margin-top:10px;">Rising India-origin SaaS management + procurement tool. 2025
+                    Gartner Magic Quadrant recognition for SaaS Management Platforms. Directly overlaps with Spendflo's
+                    IT buyer use case.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 5: COMPARISON TABLE -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="comparison">
+        <div class="section-label">05 · Competitive Comparison</div>
+        <h2>Feature & Positioning Matrix</h2>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th>Spendflo</th>
+                        <th>Zip</th>
+                        <th>Vendr</th>
+                        <th>Tropic</th>
+                        <th>Vertice</th>
+                        <th>Zluri</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI Intake / NL Requests</td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                        <td><span class="badge amber">Partial</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                        <td><span class="badge red">None</span></td>
+                    </tr>
+                    <tr>
+                        <td>Workflow Orchestration</td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge green">Leader</span></td>
+                        <td><span class="badge amber">Basic</span></td>
+                        <td><span class="badge green">Good</span></td>
+                        <td><span class="badge amber">Basic</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                    </tr>
+                    <tr>
+                        <td>Contract Management</td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                    </tr>
+                    <tr>
+                        <td>Vendor Negotiations</td>
+                        <td><span class="badge green">Managed Service</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge green">Core Service</span></td>
+                        <td><span class="badge green">Guaranteed</span></td>
+                        <td><span class="badge green">Guaranteed</span></td>
+                        <td><span class="badge red">None</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pricing Benchmarks</td>
+                        <td><span class="badge amber">Proprietary</span></td>
+                        <td><span class="badge green">Vendr-powered</span></td>
+                        <td><span class="badge green">Leader ($15B data)</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge red">None</span></td>
+                    </tr>
+                    <tr>
+                        <td>TPRM / Vendor Risk</td>
+                        <td><span class="badge green">Built-in</span></td>
+                        <td><span class="badge amber">Partial</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                        <td><span class="badge amber">Partial</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                        <td><span class="badge green">Strong (IT focus)</span></td>
+                    </tr>
+                    <tr>
+                        <td>Shadow IT / Usage Analytics</td>
+                        <td><span class="badge amber">Good</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge red">Weak</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge amber">Moderate</span></td>
+                        <td><span class="badge green">Leader</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cross-team Platform (Finance+IT+Legal)</td>
+                        <td><span class="badge green">All 5 teams</span></td>
+                        <td><span class="badge green">3 teams</span></td>
+                        <td><span class="badge amber">Finance focus</span></td>
+                        <td><span class="badge green">3 teams</span></td>
+                        <td><span class="badge amber">Finance focus</span></td>
+                        <td><span class="badge amber">IT focus</span></td>
+                    </tr>
+                    <tr>
+                        <td>Pricing Transparency</td>
+                        <td><span class="badge red">Hidden</span></td>
+                        <td><span class="badge red">Hidden</span></td>
+                        <td><span class="badge red">Hidden</span></td>
+                        <td><span class="badge green">Public tiers</span></td>
+                        <td><span class="badge amber">% of savings</span></td>
+                        <td><span class="badge red">Hidden</span></td>
+                    </tr>
+                    <tr>
+                        <td>Self-Serve / Trial</td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge amber">Free tier (limited)</span></td>
+                        <td><span class="badge amber">Limited trial</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                    </tr>
+                    <tr>
+                        <td>Estimated ACV</td>
+                        <td>$30–80K</td>
+                        <td>$36K+</td>
+                        <td>$36K+</td>
+                        <td>$10–40K</td>
+                        <td>% savings</td>
+                        <td>$15–50K</td>
+                    </tr>
+                    <tr>
+                        <td>Target Company Size</td>
+                        <td>200–2,000 emp.</td>
+                        <td>1,000+ emp.</td>
+                        <td>500+ emp.</td>
+                        <td>100–2,000 emp.</td>
+                        <td>200–2,000 emp.</td>
+                        <td>200–5,000 emp.</td>
+                    </tr>
+                    <tr>
+                        <td>India/APAC Presence</td>
+                        <td><span class="badge green">Strong</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge amber">EMEA</span></td>
+                        <td><span class="badge green">Strong</span></td>
+                    </tr>
+                    <tr>
+                        <td>M&amp;A / Acqui-hire Signal (2025)</td>
+                        <td><span class="badge amber">M&A Offer (Apr 2025)</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                        <td><span class="badge red">None</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top:12px;font-size:12px;color:var(--text3);">* Ratings are qualitative assessments based on
+            publicly available information and product documentation as of March 2026.</p>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 6: MARKET POSITIONING -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="market">
+        <div class="section-label">06 · Market Positioning</div>
+        <h2>Where Spendflo Sits in the Market</h2>
+
+        <h3>TAM / SAM / SOM</h3>
+        <div class="tam-bar">
+            <div class="tam-row">
+                <div class="tam-lbl">TAM</div>
+                <div class="tam-track">
+                    <div class="tam-fill" style="width:100%;background:var(--accent);"></div>
+                </div>
+                <div class="tam-val">~$50B+</div>
+            </div>
+            <div class="tam-row">
+                <div class="tam-lbl">SAM</div>
+                <div class="tam-track">
+                    <div class="tam-fill" style="width:30%;background:var(--teal);"></div>
+                </div>
+                <div class="tam-val">~$15B</div>
+            </div>
+            <div class="tam-row">
+                <div class="tam-lbl">SOM</div>
+                <div class="tam-track">
+                    <div class="tam-fill" style="width:4%;background:var(--green);"></div>
+                </div>
+                <div class="tam-val">~$500M</div>
+            </div>
+        </div>
+        <ul class="bullet-list" style="margin-top:16px;">
+            <li><strong>TAM:</strong> Global enterprise software spend management + procurement automation market
+                (~$50B). Gartner estimated global SaaS alone at $150B+ by 2023, with 30% waste = $45B addressable
+                inefficiency.</li>
+            <li><strong>SAM:</strong> Mid-market tech companies (200–5,000 employees) in NA, EMEA, and APAC actively
+                looking for SaaS procurement tooling — approximately $15B serviceable segment.</li>
+            <li><strong>SOM (3–5yr):</strong> Realistically capturable share given current team size, funding, and
+                geographic focus — approximately $400–600M ARR potential.</li>
+        </ul>
+
+        <h3>Category Membership</h3>
+        <div class="card-grid card-3" style="margin-top:16px;">
+            <div class="card"><span class="badge green" style="margin-bottom:10px;">Primary</span>
+                <p style="font-size:13px;"><strong>AI Procurement / Intake-to-Pay</strong> — Competing with Zip, Tropic
+                    in the "modern procurement platform" category. Gartner Magic Quadrant for Procurement Application
+                    Suites is the aspirational category.</p>
+            </div>
+            <div class="card"><span class="badge teal" style="margin-bottom:10px;">Secondary</span>
+                <p style="font-size:13px;"><strong>SaaS Spend Management</strong> — Competing with Vendr, Zluri,
+                    Sastrify in the "manage your SaaS stack and spend less" category.</p>
+            </div>
+            <div class="card"><span class="badge purple" style="margin-bottom:10px;">Emerging</span>
+                <p style="font-size:13px;"><strong>Agentic AI for Finance Operations</strong> — The Flash AI positioning
+                    aims to own a new category: "AI agents that do procurement work", competing with general-purpose AI
+                    tools encroaching from above.</p>
+            </div>
+        </div>
+
+        <h3>Market Trends Tailwinds</h3>
+        <ul class="bullet-list">
+            <li><strong>SaaS sprawl is accelerating</strong> — Average enterprise now runs 130–200 SaaS tools;
+                procurement chaos is structurally worsening, not improving</li>
+            <li><strong>CFOs are demanding spend control</strong> — Post-2022 macro tightening made SaaS cost
+                optimisation a board-level priority; Spendflo is riding this wave</li>
+            <li><strong>AI-native procurement is a new category</strong> — 94% of procurement executives use gen-AI
+                weekly (2025 data); first movers in AI-native platforms have compounding advantages</li>
+            <li><strong>India tech market maturation</strong> — India's SaaS market is growing rapidly; Indian-origin
+                tech companies are now buying 50–150 SaaS tools each; Spendflo has geographic and cultural proximity
+            </li>
+            <li><strong>Regulatory pressure on vendor risk</strong> — GDPR, data localisation laws, and supply-chain
+                regulations are making TPRM a compliance requirement, not optional</li>
+        </ul>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 7: GROWTH & PRODUCT STRATEGY -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="growth">
+        <div class="section-label">07 · Growth & Product Strategy</div>
+        <h2>Acquisition, Retention & Growth Loops</h2>
+
+        <h3>Acquisition Channels (Inferred)</h3>
+        <div class="card-grid card-2">
+            <div class="card">
+                <h4 style="font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;">Content + SEO</h4>
+                <ul class="bullet-list">
+                    <li>Programmatic SEO via vendor pages (e.g., "Salesforce pricing", "Slack alternatives") — classic
+                        SaaS procurement growth hack</li>
+                    <li>Benchmark reports and ebooks as lead magnets targeting CFO / procurement searches</li>
+                    <li>Podcast (procurement leaders) building community and brand</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;">Sales + Partnerships
+                </h4>
+                <ul class="bullet-list">
+                    <li>Outbound sales to finance leaders at 200–2,000 employee tech companies</li>
+                    <li>Integration partnerships (NetSuite, Coupa) as discovery channels</li>
+                    <li>Free Savings Analysis CTA is a product-led funnel wrapper over a sales-led motion</li>
+                    <li>Community and event marketing (procurement leaders network)</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Growth Loops</h3>
+        <div class="card" style="margin-top:16px;">
+            <div class="loop-item">
+                <div class="loop-icon" style="background:rgba(91,115,255,0.15);">💾</div>
+                <div>
+                    <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">Data Flywheel Loop</h4>
+                    <p style="font-size:13px;">Every negotiation deal adds pricing benchmark data → richer benchmarks
+                        attract more customers → more customers = more deal data. Similar to Vendr's moat but smaller in
+                        scale currently.</p>
+                </div>
+            </div>
+            <div class="loop-item">
+                <div class="loop-icon" style="background:rgba(54,217,201,0.15);">🔗</div>
+                <div>
+                    <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">Integration Stickiness Loop
+                    </h4>
+                    <p style="font-size:13px;">Connecting NetSuite, Coupa, Slack, DocuSign creates deep workflow
+                        embedding. Each integration raises switching costs exponentially. Churn becomes technically
+                        painful after 6 months.</p>
+                </div>
+            </div>
+            <div class="loop-item">
+                <div class="loop-icon" style="background:rgba(245,166,35,0.15);">📣</div>
+                <div>
+                    <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">ROI Referral Loop</h4>
+                    <p style="font-size:13px;">A CFO who saves $500K with Spendflo tells other CFOs. The services layer
+                        creates concrete, shareable dollar amounts that function as organic word-of-mouth in finance
+                        communities.</p>
+                </div>
+            </div>
+            <div class="loop-item">
+                <div class="loop-icon" style="background:rgba(179,107,255,0.15);">🤖</div>
+                <div>
+                    <h4 style="font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;">AI Improvement Loop</h4>
+                    <p style="font-size:13px;">More contracts analysed by Flash AI → better contract clause detection →
+                        more accurate risk flagging → more value per customer → better retention. Still early but
+                        structurally sound.</p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Retention Strategy</h3>
+        <ul class="bullet-list">
+            <li><strong>Renewal calendar</strong> is the single most sticky feature — customers literally cannot afford
+                to miss it</li>
+            <li><strong>Workflow embedding</strong> — once approval workflows are live, teams rely on them daily;
+                removing Spendflo breaks procurement operations</li>
+            <li><strong>Dedicated procurement expert</strong> relationships create personal switching costs on top of
+                technical ones</li>
+            <li><strong>Annual contracts</strong> with multi-year incentives keep customers locked in during the
+                critical value-realisation window</li>
+        </ul>
+
+        <h3>Network Effects</h3>
+        <p>Network effects are <strong>weak at the product level</strong> but exist in the <strong>data layer</strong>.
+            More customers → more negotiation data → better benchmarks → better outcomes for all customers. This is a
+            data network effect, not a direct network effect. Spendflo needs to scale its customer base 5–10x to make
+            this moat meaningful vs Vendr's $15B dataset.</p>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 8: GAPS & OPPORTUNITIES -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="gaps">
+        <div class="section-label">08 · Gaps & Opportunities</div>
+        <h2>Where Spendflo Has Room to Win</h2>
+
+        <div class="card-grid card-2">
+            <div class="card">
+                <h4 style="color:var(--red);font-size:13px;margin-bottom:12px;">Product Gaps</h4>
+                <ul class="bullet-list">
+                    <li><strong>No mobile app</strong> — Procurement approvals happen when people are on the go;
+                        competitors who launch mobile first will win user experience in this moment</li>
+                    <li><strong>No self-serve trial</strong> — The entire evaluation journey requires a sales call,
+                        eliminating bottom-up interest from product managers and finance analysts who discover the tool
+                        independently</li>
+                    <li><strong>AP automation depth</strong> — The Payables Agent exists but invoice matching, 3-way
+                        matching, and AP automation are mentioned but not yet the core narrative</li>
+                    <li><strong>Supplier/vendor portal</strong> — Vendors currently have no way to self-serve into
+                        Spendflo. A supplier portal could become a two-sided network effect</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="color:var(--amber);font-size:13px;margin-bottom:12px;">UX Gaps</h4>
+                <ul class="bullet-list">
+                    <li><strong>No pricing transparency</strong> — Buyers evaluating multiple tools are frustrated by
+                        the full sales-required discovery. A freemium tier or transparent starter pricing would lower
+                        friction dramatically.</li>
+                    <li><strong>Flash AI brand confusion</strong> — The sub-brand sits awkwardly alongside "Spendflo AI"
+                        and "Spendflo platform". Consolidation needed.</li>
+                    <li><strong>Onboarding time</strong> — "White-glove" is good but implies weeks; a self-guided
+                        fast-track for smaller teams would expand the addressable market downmarket</li>
+                    <li><strong>Reporting depth</strong> — Conversational reporting is powerful but structured
+                        dashboards and exportable BI are missing for finance teams that live in Excel/Sheets</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="color:var(--green);font-size:13px;margin-bottom:12px;">Feature Opportunities</h4>
+                <ul class="bullet-list">
+                    <li><strong>Supplier portal / two-sided network</strong> — Let vendors self-serve compliance
+                        documents, pricing, and contacts into Spendflo. Massive retention mechanic.</li>
+                    <li><strong>AI contract drafting</strong> — Not just analysing contracts but suggesting redlines,
+                        generating NDA/MSA boilerplates, closing the legal ops loop</li>
+                    <li><strong>Spend forecasting</strong> — Predict next-year SaaS costs based on growth trajectory;
+                        become the "procurement FP&amp;A tool"</li>
+                    <li><strong>Benchmark API / data product</strong> — Monetise pricing benchmark data separately as an
+                        API layer (like Vendr does). Revenue diversification + data moat monetisation.</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4 style="color:var(--purple);font-size:13px;margin-bottom:12px;">Expansion Ideas</h4>
+                <ul class="bullet-list">
+                    <li><strong>India market deepening</strong> — The India SaaS market is growing rapidly. Spendflo's
+                        cultural and cost proximity gives it a 2-3 year window to become the category leader in India
+                        before US competitors arrive.</li>
+                    <li><strong>SMB / PLG motion</strong> — A self-serve $500/month tier for 50–200 person companies
+                        creates a pipeline feeder into enterprise. Currently leaves the $2B SMB segment completely
+                        unserved.</li>
+                    <li><strong>Hardware / non-SaaS procurement</strong> — Tropic does non-SaaS spend too. Spendflo's
+                        workflow engine could handle office equipment, cloud credits, and professional services
+                        procurement.</li>
+                    <li><strong>Fintech B2B payments layer</strong> — A procurement platform that also moves money
+                        (virtual cards, AP payments) could capture a payment transaction revenue stream — a la Ramp/Brex
+                        model.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 9: SWOT -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="swot">
+        <div class="section-label">09 · SWOT Analysis</div>
+        <h2>Strategic Strength & Vulnerability Map</h2>
+
+        <div class="swot-grid">
+            <div class="swot-cell s">
+                <div class="swot-label">Strengths</div>
+                <ul class="bullet-list">
+                    <li><strong>Hybrid model (software + services)</strong> creates tangible, measurable ROI that
+                        pure-SaaS competitors struggle to match</li>
+                    <li><strong>AI-native architecture</strong> — Flash AI agents are not bolted on; the product was
+                        designed with AI at the core from the start</li>
+                    <li><strong>Cross-team platform</strong> — Serves Finance, IT, Legal, Procurement, and Stakeholders
+                        simultaneously; competitors typically serve only 1–2 teams</li>
+                    <li><strong>India-origin cost structure</strong> — Significant unit economics advantage vs US-native
+                        competitors; enables better pricing</li>
+                    <li><strong>Strong investor backing</strong> — Accel + Prosus signal category credibility; multiple
+                        rounds suggest growth validation</li>
+                    <li><strong>SOC2 + GDPR certified</strong> — Enterprise security posture ready for
+                        compliance-sensitive buyers</li>
+                    <li><strong>High NRR potential</strong> — Renewal calendar + workflow integration = natural
+                        expansion vector per account</li>
+                </ul>
+            </div>
+            <div class="swot-cell w">
+                <div class="swot-label">Weaknesses</div>
+                <ul class="bullet-list">
+                    <li><strong>Fully sales-led</strong> — No self-serve, no freemium, no trial; high friction for
+                        evaluation and a smaller TAM reached</li>
+                    <li><strong>No mobile presence</strong> — Approval workflows on mobile are a basic expectation; gap
+                        becoming a sales objection</li>
+                    <li><strong>Smaller pricing benchmark dataset</strong> — Vendr's $15B+ is a data moat Spendflo
+                        cannot close quickly without acquisitions</li>
+                    <li><strong>Brand awareness limited</strong> — Unknown outside the finance/procurement community;
+                        not a category-defining brand yet</li>
+                    <li><strong>M&amp;A offer signals (Apr 2025)</strong> — Acquisition approach suggests possible
+                        capital pressure or consolidation risk</li>
+                    <li><strong>Services headcount cost</strong> — Human negotiator model is not infinitely scalable; AI
+                        must replace meaningful % of this layer</li>
+                </ul>
+            </div>
+            <div class="swot-cell o">
+                <div class="swot-label">Opportunities</div>
+                <ul class="bullet-list">
+                    <li><strong>India SaaS market leadership</strong> — No US competitor is seriously investing in
+                        India; Spendflo can own the category domestically</li>
+                    <li><strong>AP automation expansion</strong> — Payables Agent is a wedge into the $10B AP automation
+                        market (Tipalti, Bill.com territory)</li>
+                    <li><strong>SMB product-led growth</strong> — A self-serve tier would 10x the addressable market and
+                        create an enterprise pipeline feeder</li>
+                    <li><strong>Supplier portal network effect</strong> — Two-sided platform with vendor self-serve
+                        could create defensible moat</li>
+                    <li><strong>Generative AI as category tailwind</strong> — Buyer appetite for AI-powered tools is at
+                        an all-time high; Spendflo's Flash AI positioning is well-timed</li>
+                    <li><strong>Acquisitions</strong> — Could acquire niche tools (contract analytics, spend
+                        forecasting) to fill product gaps faster than building</li>
+                </ul>
+            </div>
+            <div class="swot-cell t">
+                <div class="swot-label">Threats</div>
+                <ul class="bullet-list">
+                    <li><strong>Zip + Vendr partnership</strong> — The market's #1 orchestration platform now has the
+                        market's #1 pricing data; creates a formidable combined offering</li>
+                    <li><strong>Enterprise platforms expanding down</strong> — Coupa, SAP Ariba, ServiceNow are all
+                        investing in mid-market AI-native procurement features</li>
+                    <li><strong>General AI tool commoditisation</strong> — ChatGPT/Claude-based contract analysis tools
+                        are free and improving; the contract analysis moat erodes as LLMs democratise it</li>
+                    <li><strong>Ramp expanding procurement</strong> — Ramp's distribution + corporate card data is a
+                        powerful combination for bundled SaaS procurement features</li>
+                    <li><strong>Funding environment</strong> — Series B in a tightening market requires strong ARR
+                        growth metrics; M&amp;A signals suggest some capital uncertainty</li>
+                    <li><strong>Talent competition</strong> — Both AI engineers and procurement domain experts are
+                        scarce and expensive globally</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SECTION 10: IMPROVEMENTS -->
+    <!-- ─────────────────────────────────────── -->
+    <section id="improvements">
+        <div class="section-label">10 · Product Improvement Recommendations</div>
+        <h2>The PM's Roadmap Memo</h2>
+
+        <h3>5 High-Impact Product Improvements</h3>
+
+        <div class="improve-card">
+            <div class="num-circle">01</div>
+            <div class="content">
+                <h4>Launch a Self-Serve PLG Tier ($0 → $499/mo)</h4>
+                <p>Create a free/freemium entry point for 1–50 vendor stack management. This feeds the enterprise
+                    pipeline, creates bottom-up champions inside target accounts, and unlocks the $2B SMB market
+                    currently left to spreadsheets. Even a 5% conversion to paid = meaningful ARR. The "Free Savings
+                    Analysis" is a sales call, not a product experience — you need a product experience.</p>
+            </div>
+        </div>
+
+        <div class="improve-card">
+            <div class="num-circle">02</div>
+            <div class="content">
+                <h4>Build Native Mobile App (Approvals + Alerts)</h4>
+                <p>Procurement approvals are blocked daily because decision-makers are not at their desks. A
+                    mobile-first approvals app (iOS + Android) with push notifications for time-sensitive requests,
+                    renewal alerts, and contract signatures would reduce cycle times by 30–50%. This is table stakes for
+                    modern procurement tools and a recurring sales objection today.</p>
+            </div>
+        </div>
+
+        <div class="improve-card">
+            <div class="num-circle">03</div>
+            <div class="content">
+                <h4>Launch a Supplier/Vendor Self-Serve Portal</h4>
+                <p>Build a two-sided network by allowing vendors to onboard themselves: upload compliance certs, pricing
+                    sheets, security questionnaire responses, and contact info directly into Spendflo. This reduces
+                    procurement team burden, speeds up TPRM, and — critically — creates a supply-side network effect.
+                    Each vendor who self-onboards becomes an implicit referral channel to buyers evaluating the same
+                    vendor.</p>
+            </div>
+        </div>
+
+        <div class="improve-card">
+            <div class="num-circle">04</div>
+            <div class="content">
+                <h4>Deepen Flash AI → Full Agentic Procurement Analyst</h4>
+                <p>The current AI agents (Contract Analyst, Payables Agent, Procurement Analyst) are well-named but need
+                    to do heavier lifting. Priority: (a) proactive renewal negotiation triggers — Flash AI should
+                    surface "Your Salesforce contract renews in 45 days, based on usage data you're at 67% utilisation,
+                    suggest opening renegotiation now"; (b) AI-generated redlines and contract clause suggestions; (c)
+                    vendor spend anomaly detection with auto-flagging. This is where the product becomes irreplaceable
+                    vs a category tool.</p>
+            </div>
+        </div>
+
+        <div class="improve-card">
+            <div class="num-circle">05</div>
+            <div class="content">
+                <h4>Publish Transparent Pricing Tiers</h4>
+                <p>Not full custom pricing, but a clear "Starter / Growth / Enterprise" structure with feature lists and
+                    at least indicative pricing ranges. Buyers hate surprises. Tropic's transparent pricing is a
+                    meaningful competitive advantage in the evaluation phase. Spendflo loses deals in the discovery
+                    stage to competitors who make evaluation easier. A pricing page with "starts at $X/month" anchors
+                    the buyer and qualifies inbound before a sales call.</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:36px;">3 Quick Wins (Ship in 30–60 days)</h3>
+
+        <div class="improve-card quick">
+            <div class="num-circle">Q1</div>
+            <div class="content">
+                <h4>Add Renewal Risk Dashboard to Homepage</h4>
+                <p>A "Renewals at Risk" view — contracts expiring in the next 90 days with utilisation below 50% —
+                    should be the first thing a CFO sees on login. This is the highest-anxiety moment in procurement;
+                    owning that screen = daily active usage.</p>
+            </div>
+        </div>
+
+        <div class="improve-card quick">
+            <div class="num-circle">Q2</div>
+            <div class="content">
+                <h4>Publish the Flash AI Benchmark Report as a Public Tool</h4>
+                <p>"What does [Vendor X] typically cost for a 200-person company?" — make this searchable and public
+                    (partial). Like Vendr's public pricing pages. This drives SEO traffic, builds the data brand, and
+                    pulls in prospects who are mid-procurement for specific vendors.</p>
+            </div>
+        </div>
+
+        <div class="improve-card quick">
+            <div class="num-circle">Q3</div>
+            <div class="content">
+                <h4>Add Slack / Teams Bot for Procurement Requests</h4>
+                <p>Meet employees where they already work. A Slack bot that lets anyone raise a procurement request
+                    ("Hey Spendflo, I need to buy Figma for the design team, $1,200/year") and routes it through the
+                    workflow engine would dramatically increase adoption and reduce the need for employees to log into a
+                    separate tool.</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:36px;">2 Bold Bets (Moonshots)</h3>
+
+        <div class="improve-card bold">
+            <div class="num-circle">B1</div>
+            <div class="content">
+                <h4>Become the B2B Procurement Fintech: Spendflo Pay</h4>
+                <p>The ultimate expansion play: issue virtual corporate cards + manage AP payments through Spendflo.
+                    Every time a vendor invoice is approved through Spendflo's workflow, route the payment through
+                    Spendflo's payment rail. Capture interchange on B2B spend (typically 0.5–1.5%). This is a
+                    multi-billion dollar revenue model — Ramp and Brex proved it works. The procurement context makes
+                    Spendflo's card smarter: it can auto-enforce policy, flag policy violations, and reconcile against
+                    contracts automatically. This transforms Spendflo from a $30M ARR SaaS company into a potential
+                    $500M+ fintech.</p>
+            </div>
+        </div>
+
+        <div class="improve-card bold">
+            <div class="num-circle">B2</div>
+            <div class="content">
+                <h4>Build the "Procurement OS" for India's SaaS Ecosystem</h4>
+                <p>India is building the world's next generation of B2B SaaS companies. None of them have a procurement
+                    platform they trust. Spendflo — with India founders, India engineering, and India-market cultural
+                    fit — can become the dominant infrastructure layer for procurement at every Indian tech company from
+                    Series A to IPO. This means building India-specific features: GST compliance, INR workflows, Indian
+                    vendor onboarding, TDS management, and RBI-compliant payment integrations. A "Spendflo for India"
+                    product suite, priced for the Indian market, could grow 10x faster than the US motion with 20% of
+                    the CAC.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Analysis compiled by Arihant Jain · Data sources: spendflo.com, Crunchbase, PitchBook, Tracxn, Latka,
+            CBInsights,
+            competitor websites · March 2026</p>
+        <p style="margin-top:6px;">This report is for strategic analysis purposes. All figures are estimates or publicly
+            available data. M&amp;A signals referenced are from public databases.</p>
+    </footer>
+
+</body>
+
+</html>
