@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jar Growth Case Study</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4A843;
+            --gold-light: #F0C96B;
+            --gold-pale: #FDF6E3;
+            --ink: #0F0E0A;
+            --ink-soft: #2A2820;
+            --muted: #6B6455;
+            --border: #E8E0CC;
+            --surface: #FAFAF7;
+            --white: #FFFFFF;
+            --red: #C0392B;
+            --green: #1A7A4A;
+            --blue: #1A5FA8;
+            --teal: #0F7A6E;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--surface);
+            color: var(--ink);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* ── HEADER ── */
+        .masthead {
+            background: var(--ink);
+            color: var(--white);
+            padding: 3rem 2rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .masthead::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 168, 67, 0.18) 0%, transparent 70%);
+        }
+
+        .masthead-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .masthead h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(22px, 4vw, 36px);
+            font-weight: 800;
+            line-height: 1.15;
+            color: var(--white);
+            margin-bottom: 1rem;
+            max-width: 700px;
+        }
+
+        .masthead h1 em {
+            font-style: normal;
+            color: var(--gold-light);
+        }
+
+        .masthead-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 1.25rem;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 2px;
+            border: 1px solid;
+        }
+
+        .badge-gold {
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+
+        .badge-outline {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ── NAV ── */
+        .nav-strip {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-strip::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-btn {
+            font-family: 'DM Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 14px 16px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            color: var(--muted);
+            white-space: nowrap;
+            transition: all 0.15s;
+        }
+
+        .nav-btn:hover {
+            color: var(--ink);
+        }
+
+        .nav-btn.active {
+            color: var(--ink);
+            border-bottom-color: var(--gold);
+        }
+
+        /* ── LAYOUT ── */
+        .content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* ── SECTION TITLES ── */
+        .sec-label {
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .sec-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1.1rem 1.25rem;
+        }
+
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--ink);
+        }
+
+        .card p,
+        .card li {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .card ul {
+            padding-left: 1.1rem;
+        }
+
+        .card li {
+            margin-bottom: 4px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        /* ── PROBLEM STATEMENT ── */
+        .problem-block {
+            background: var(--ink);
+            color: var(--white);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .problem-block p {
+            font-family: 'Instrument Serif', serif;
+            font-size: 17px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .problem-block p em {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        /* ── STAT CARDS ── */
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--ink);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .stat-sub {
+            font-size: 10px;
+            color: var(--border);
+            margin-top: 2px;
+        }
+
+        /* ── FUNNEL ── */
+        .funnel-step {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 6px;
+            gap: 0;
+        }
+
+        .funnel-bar-wrap {
+            flex: 1;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            height: 52px;
+            position: relative;
+        }
+
+        .funnel-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            transition: width 0.8s ease;
+        }
+
+        .funnel-stage {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .funnel-pct {
+            font-size: 11px;
+            margin-left: 6px;
+            opacity: 0.8;
+            color: var(--white);
+        }
+
+        .funnel-drop {
+            width: 130px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            padding-left: 12px;
+            font-size: 11px;
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        .funnel-num {
+            width: 80px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            padding-right: 12px;
+            font-size: 11px;
+            color: var(--muted);
+            justify-content: flex-end;
+        }
+
+        .f-green {
+            background: #1A7A4A;
+        }
+
+        .f-teal {
+            background: #0F7A6E;
+        }
+
+        .f-blue {
+            background: #1A5FA8;
+        }
+
+        .f-amber {
+            background: #D4A843;
+        }
+
+        .f-red {
+            background: #C0392B;
+        }
+
+        /* ── DROP-OFF TABLE ── */
+        .drop-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.25rem;
+        }
+
+        .drop-table th {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            background: var(--surface);
+        }
+
+        .drop-table td {
+            font-size: 12px;
+            padding: 10px 10px;
+            border-bottom: 1px solid var(--border);
+            color: var(--ink-soft);
+            vertical-align: top;
+        }
+
+        .drop-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .drop-table td:first-child {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .severity {
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 7px;
+            border-radius: 2px;
+        }
+
+        .sev-high {
+            background: #FAECE7;
+            color: var(--red);
+        }
+
+        .sev-med {
+            background: #FEF9EC;
+            color: #8B6914;
+        }
+
+        /* ── HYPOTHESIS ── */
+        .hypo-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .hypo-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hypo-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .hypo-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .hypo-body {
+            padding: 12px 14px;
+            background: var(--white);
+        }
+
+        .hypo-body p {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        .signal-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .signal-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: var(--gold-pale);
+            color: #7A5B10;
+            border-radius: 2px;
+            border: 1px solid #E8D9A0;
+        }
+
+        /* ── EXPERIMENTS ── */
+        .exp-card {
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+
+        .exp-header {
+            background: var(--ink);
+            color: var(--white);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .exp-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--gold);
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .exp-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .exp-impact {
+            margin-left: auto;
+            font-size: 10px;
+            padding: 3px 9px;
+            border-radius: 2px;
+            background: rgba(212, 168, 67, 0.2);
+            color: var(--gold-light);
+            border: 1px solid rgba(212, 168, 67, 0.3);
+            white-space: nowrap;
+        }
+
+        .exp-body {
+            background: var(--white);
+        }
+
+        .exp-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0;
+        }
+
+        .exp-section {
+            padding: 12px 14px;
+            border-right: 1px solid var(--border);
+        }
+
+        .exp-section:last-child {
+            border-right: none;
+        }
+
+        .exp-sec-label {
+            font-size: 9px;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+
+        .exp-section p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .exp-metric {
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: var(--surface);
+            flex-wrap: wrap;
+        }
+
+        .exp-metric-label {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .metric-pill {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--ink-soft);
+        }
+
+        /* ── METRICS ── */
+        .metric-tier {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 12px;
+        }
+
+        .tier-label {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tier-north {
+            color: var(--green);
+        }
+
+        .tier-activation {
+            color: var(--blue);
+        }
+
+        .tier-retention {
+            color: var(--teal);
+        }
+
+        .tier-revenue {
+            color: #8B4513;
+        }
+
+        .tier-health {
+            color: var(--muted);
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: 180px 100px 1fr;
+            gap: 12px;
+            padding: 7px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: start;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-name {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .metric-target {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .metric-note {
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* ── DASHBOARD ── */
+        .dashboard-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .dash-header {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dash-tool {
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .tool-mixpanel {
+            background: #EEF2FF;
+            color: #3730A3;
+            border: 1px solid #C7D2FE;
+        }
+
+        .tool-amplitude {
+            background: #F0FDF4;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+
+        .tool-metabase {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        .dash-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .dash-body {
+            padding: 12px 14px;
+        }
+
+        .dash-widgets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .widget-tag {
+            font-size: 11px;
+            padding: 3px 9px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--ink-soft);
+        }
+
+        /* ── IMPACT TABLE ── */
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .impact-table th {
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            background: var(--ink);
+            color: rgba(255, 255, 255, 0.7);
+            text-align: left;
+        }
+
+        .impact-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            font-size: 12.5px;
+            color: var(--ink-soft);
+            background: var(--white);
+        }
+
+        .impact-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .impact-table td:first-child {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .up {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        .total-row td {
+            background: var(--gold-pale) !important;
+            font-weight: 600;
+            color: var(--ink) !important;
+        }
+
+        /* ── FOOTER ── */
+        .case-footer {
+            background: var(--ink);
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 11px;
+            margin-top: 3rem;
+        }
+
+        .case-footer span {
+            color: var(--gold);
+        }
+
+        @media (max-width: 640px) {
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .exp-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .exp-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .metric-row {
+                grid-template-columns: 1fr 80px;
+            }
+
+            .metric-note {
+                display: none;
+            }
+
+            .funnel-drop {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="masthead">
+        <div class="masthead-label">Growth Case Study · Associate Growth Manager</div>
+        <h1>How to Increase <em>Daily Savings Autopay</em><br>Conversion & Retention at Jar</h1>
+        <div class="masthead-meta">
+            <span class="badge badge-gold">Jar App · 2025</span>
+            <span class="badge badge-outline">20M+ Users</span>
+            <span class="badge badge-outline">1M+ UPI Autopay / day</span>
+            <span class="badge badge-outline">PM × Growth</span>
+            <span class="badge badge-outline">Data-Driven</span>
+        </div>
+    </div>
+
+    <div class="nav-strip">
+        <button class="nav-btn active" onclick="show('problem')">01 Problem</button>
+        <button class="nav-btn" onclick="show('funnel')">02 Funnel</button>
+        <button class="nav-btn" onclick="show('dropoffs')">03 Drop-offs</button>
+        <button class="nav-btn" onclick="show('hypotheses')">04 Hypotheses</button>
+        <button class="nav-btn" onclick="show('experiments')">05 Experiments</button>
+        <button class="nav-btn" onclick="show('metrics')">06 Metrics</button>
+        <button class="nav-btn" onclick="show('dashboards')">07 Dashboards</button>
+        <button class="nav-btn" onclick="show('impact')">08 Impact</button>
+    </div>
+
+    <div class="content">
+
+        <!-- ── 01 PROBLEM ── -->
+        <div id="panel-problem" class="panel active">
+            <div class="sec-label">Section 01</div>
+            <div class="sec-title">Problem Statement</div>
+
+            <div class="problem-block">
+                <p>Jar installs at scale — but the majority of users <em>never set up a single Autopay mandate</em>. Of
+                    those who do, a significant cohort saves for 1–2 months and silently stops. The result: Jar has 20M+
+                    registered users but only a fraction are <em>active daily savers contributing to AUM</em>. The
+                    business opportunity is not more installs — it's converting and retaining the users already in the
+                    funnel.</p>
+            </div>
+
+            <div class="grid-4">
+                <div class="stat-card">
+                    <div class="stat-num">20M+</div>
+                    <div class="stat-label">Registered users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" style="color:var(--red)">~30%</div>
+                    <div class="stat-label">Estimated Autopay activation</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" style="color:var(--gold)">D30</div>
+                    <div class="stat-label">Highest churn window</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-num" style="color:var(--green)">1M+</div>
+                    <div class="stat-label">Daily UPI txns (best case)</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Business context</div>
+                    <ul>
+                        <li>Jar's revenue model depends on AUM (gold spread + platform fees). More active savers =
+                            higher AUM = higher revenue.</li>
+                        <li>Became profitable Jan 2025 — but sustainable growth requires improving LTV per user, not
+                            just adding installs.</li>
+                        <li>Every unactivated user is a sunk CAC cost. Activating even 10% more of existing installs is
+                            more capital-efficient than acquiring new ones.</li>
+                        <li>Nek jewelry brand (₹100Cr+ revenue) creates a natural high-intent redemption hook that's
+                            underutilised in the savings flow.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title">User behavior context (Mass India)</div>
+                    <ul>
+                        <li>Target user: 22–35 yr, Tier 2/3, monthly income ₹15K–40K. First-time digital saver.</li>
+                        <li>Mental model: "I'll start saving when I have enough money" — deferral is the default.</li>
+                        <li>Trust barrier: UPI Autopay = "auto-deduction from bank" — feels risky to low-income users.
+                        </li>
+                        <li>Gold saves the day: cultural familiarity with gold removes asset-class friction, but product
+                            friction remains high.</li>
+                        <li>External triggers (festivals, salary day) drive spikes — but no sustained daily habit is
+                            formed.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">The core problem in one line</div>
+                <p
+                    style="font-size:14px; font-family:'Instrument Serif', serif; color:var(--ink); line-height:1.7; margin-top:4px;">
+                    Jar has a <strong>habit formation problem</strong>, not a discovery problem. Users understand the
+                    concept but don't complete the activation step — and those who do churn within 30 days before the
+                    saving habit is cemented.
+                </p>
+            </div>
+        </div>
+
+        <!-- ── 02 FUNNEL ── -->
+        <div id="panel-funnel" class="panel">
+            <div class="sec-label">Section 02</div>
+            <div class="sec-title">Full Funnel Breakdown</div>
+
+            <div class="card" style="margin-bottom:16px; padding:1.5rem;">
+                <div style="margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                        <span
+                            style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);">Stage</span>
+                        <span
+                            style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);">Drop-off</span>
+                    </div>
+                </div>
+
+                <div class="funnel-step">
+                    <div class="funnel-num">100%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-green" style="width:100%"><span class="funnel-stage">App
+                                Install</span><span class="funnel-pct">100%</span></div>
+                    </div>
+                    <div class="funnel-drop">—</div>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-num">72%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-green" style="width:72%"><span class="funnel-stage">KYC
+                                Completed</span><span class="funnel-pct">72%</span></div>
+                    </div>
+                    <div class="funnel-drop">▼ 28% drop</div>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-num">48%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-teal" style="width:48%"><span class="funnel-stage">First Gold
+                                Purchase</span><span class="funnel-pct">48%</span></div>
+                    </div>
+                    <div class="funnel-drop">▼ 24% drop</div>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-num">30%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-blue" style="width:30%"><span class="funnel-stage">Autopay Mandate
+                                Set</span><span class="funnel-pct">30%</span></div>
+                    </div>
+                    <div class="funnel-drop" style="color:var(--red);font-weight:700;">▼ 18% drop ⚠</div>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-num">21%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-amber" style="width:21%"><span class="funnel-stage">D7 Active
+                                Saver</span><span class="funnel-pct">21%</span></div>
+                    </div>
+                    <div class="funnel-drop" style="color:var(--red);font-weight:700;">▼ 9% drop ⚠</div>
+                </div>
+                <div class="funnel-step">
+                    <div class="funnel-num">12%</div>
+                    <div class="funnel-bar-wrap">
+                        <div class="funnel-fill f-red" style="width:12%"><span class="funnel-stage">D30 Active
+                                Saver</span><span class="funnel-pct">12%</span></div>
+                    </div>
+                    <div class="funnel-drop" style="color:var(--red);font-weight:700;">▼ 9% drop ⚠</div>
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title" style="color:var(--green)">Acquisition</div>
+                    <p><strong>Install → KYC (72%)</strong><br>Relatively healthy. Meta/Google performance ads +
+                        referrals drive installs. KYC drop is standard for fintech — Aadhaar OTP friction.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color:var(--blue)">Activation</div>
+                    <p><strong>KYC → Autopay (30%)</strong><br>Critical failure zone. Users complete KYC but don't reach
+                        Autopay. The "aha moment" — seeing daily gold accumulate — never fires.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title" style="color:var(--red)">Retention</div>
+                    <p><strong>D7 → D30 (56% survive)</strong><br>Among activated users, almost half churn before
+                        building a habit. Biggest lever for LTV improvement — already paid for these users.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Revenue implications</div>
+                <p>Assuming 1M monthly installs: only ~120K become D30 active savers. If activation improves from 30% →
+                    40% and D30 retention improves 12% → 18%, active saver base grows 2.2x — without spending a rupee
+                    more on acquisition.</p>
+            </div>
+        </div>
+
+        <!-- ── 03 DROP-OFFS ── -->
+        <div id="panel-dropoffs" class="panel">
+            <div class="sec-label">Section 03</div>
+            <div class="sec-title">Key Drop-off Points & Reasoning</div>
+
+            <table class="drop-table">
+                <thead>
+                    <tr>
+                        <th>Drop-off Stage</th>
+                        <th>Est. Loss</th>
+                        <th>Severity</th>
+                        <th>Root Cause</th>
+                        <th>Signal to verify</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Install → KYC</td>
+                        <td>~28%</td>
+                        <td><span class="severity sev-med">Medium</span></td>
+                        <td>Aadhaar OTP timeout, name mismatch, unclear value prop before KYC asks for data</td>
+                        <td>Session recordings on KYC screen; time-on-screen before drop</td>
+                    </tr>
+                    <tr>
+                        <td>First purchase → Autopay setup</td>
+                        <td>~38%</td>
+                        <td><span class="severity sev-high">High 🔴</span></td>
+                        <td>UPI mandate feels like "giving bank access." No trust-building step. One-time save doesn't
+                            feel risky; recurring does. Users don't see enough value to commit daily.</td>
+                        <td>Heatmaps on Autopay screen; support tickets mentioning "auto-deduction fear"</td>
+                    </tr>
+                    <tr>
+                        <td>Autopay set → D7 save</td>
+                        <td>~30%</td>
+                        <td><span class="severity sev-high">High 🔴</span></td>
+                        <td>No habit trigger. First 7 days have no meaningful engagement. Users forgot they set it up.
+                            No "streak started" celebration. No visible balance growth reward.</td>
+                        <td>Push notification CTR D1–D7; app open rate post-Autopay setup</td>
+                    </tr>
+                    <tr>
+                        <td>D7 → D30 retention</td>
+                        <td>~43%</td>
+                        <td><span class="severity sev-high">High 🔴</span></td>
+                        <td>No emotional anchor to the saving goal. Pause happens after one failed mandate (low bank
+                            balance). No recovery nudge after pause. No social/progress milestone to celebrate.</td>
+                        <td>Event: "autopay_paused" → time to churn; cohort retention curves in Amplitude</td>
+                    </tr>
+                    <tr>
+                        <td>D30 → D90 upgrade (Gold+)</td>
+                        <td>~70%</td>
+                        <td><span class="severity sev-med">Medium</span></td>
+                        <td>Gold+ awareness low among active savers. 0.5g minimum not surfaced clearly. Users don't see
+                            a natural upgrade path from casual saving to yield-earning.</td>
+                        <td>% of D30 users who viewed Gold+ screen; conversion from view → enroll</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">The #1 drop-off to fix first</div>
+                    <p><strong>First purchase → Autopay setup.</strong> This is where Jar's core value proposition —
+                        daily compounding gold savings — never gets experienced. A user who manually buys gold once and
+                        leaves is worth ₹X. A user with Autopay running for 6 months is worth ₹20X. Every product and
+                        growth effort should optimise this transition first.</p>
+                </div>
+                <div class="card">
+                    <div class="card-title">Why D7–D30 churn is underrated</div>
+                    <p>Most teams focus on activation. But D7–D30 churn destroys LTV silently. These users <em>already
+                            set up Autopay</em> — they crossed the hardest barrier. Losing them is pure retention
+                        failure, not acquisition failure. A 5-point improvement in D30 retention has 3–4x more LTV
+                        impact than an equivalent improvement in activation rate.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 04 HYPOTHESES ── -->
+        <div id="panel-hypotheses" class="panel">
+            <div class="sec-label">Section 04</div>
+            <div class="sec-title">Why Users Are Not Converting — 5 Hypotheses</div>
+
+            <div class="hypo-card">
+                <div class="hypo-header">
+                    <span class="hypo-num">H1</span>
+                    <span class="hypo-title">UPI Autopay mandate feels financially threatening to low-income
+                        users</span>
+                </div>
+                <div class="hypo-body">
+                    <p>Target users earn ₹15K–40K/month and live paycheck-to-paycheck. "UPI Autopay" reads as "bank
+                        account access" — similar to EMI deductions that have caused negative experiences. The ₹50/day
+                        default might sound small, but after salary, it triggers anxiety. Jar's UI doesn't sufficiently
+                        de-risk the mandate step with trust signals, cancellation clarity, or a "you're in control"
+                        reassurance.</p>
+                    <div class="signal-row">
+                        <span class="signal-tag">Support tickets: "how do I cancel autopay"</span>
+                        <span class="signal-tag">High drop on mandate confirmation screen</span>
+                        <span class="signal-tag">Low autopay % in Tier 3 vs Tier 1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hypo-card">
+                <div class="hypo-header">
+                    <span class="hypo-num">H2</span>
+                    <span class="hypo-title">There is no compelling "aha moment" before Autopay is asked</span>
+                </div>
+                <div class="hypo-body">
+                    <p>Users are asked to commit to daily saving before they've experienced any value. The product skips
+                        the reward loop: Install → KYC → "Set Autopay" — no dopamine hit in between. Compare to games
+                        that give you a win before asking for a purchase. Jar should show users their gold growing for
+                        1–2 days before asking for Autopay commitment — earned commitment converts better than cold
+                        commitment.</p>
+                    <div class="signal-row">
+                        <span class="signal-tag">Users who do 1 manual save before autopay = higher conversion</span>
+                        <span class="signal-tag">Time between install and autopay setup is too compressed</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hypo-card">
+                <div class="hypo-header">
+                    <span class="hypo-num">H3</span>
+                    <span class="hypo-title">Saving amount defaults feel either too high or too abstract</span>
+                </div>
+                <div class="hypo-body">
+                    <p>₹50/day = ₹1,500/month. For a user earning ₹18K, that's 8.3% of income — not trivial. But Jar
+                        shows it as "₹50/day" without contextualising what it becomes. The nudge lacks goal anchoring
+                        ("₹50/day for 180 days = 1g gold coin for Diwali"). Without a visualised outcome, ₹50/day feels
+                        like a cost, not an investment.</p>
+                    <div class="signal-row">
+                        <span class="signal-tag">Users who set custom amounts vs default</span>
+                        <span class="signal-tag">Autopay conversion by amount bracket</span>
+                        <span class="signal-tag">Goal-setting users vs non-goal users retention delta</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hypo-card">
+                <div class="hypo-header">
+                    <span class="hypo-num">H4</span>
+                    <span class="hypo-title">No habit cue or external trigger fires during the critical D1–D7
+                        window</span>
+                </div>
+                <div class="hypo-body">
+                    <p>Habit formation requires cue → routine → reward (Duhigg loop). Jar has the routine (autopay) and
+                        a weak reward (balance ticks up) but no strong cue. There are no personalized nudges tied to
+                        salary credit day, no streak notifications, no "you saved for 3 days in a row" moment. D1–D7 is
+                        quiet after setup — and silence = forgetting.</p>
+                    <div class="signal-row">
+                        <span class="signal-tag">Push notification CTR D1-D7 is low</span>
+                        <span class="signal-tag">App opens drop sharply post autopay setup</span>
+                        <span class="signal-tag">Mandate failure rate spikes on non-salary days</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hypo-card">
+                <div class="hypo-header">
+                    <span class="hypo-num">H5</span>
+                    <span class="hypo-title">Autopay pause/failure is a permanent exit — no recovery flow exists</span>
+                </div>
+                <div class="hypo-body">
+                    <p>One failed mandate (due to low balance) likely pauses Autopay without a smart recovery nudge. For
+                        mass India users, month-end is tight. A failed deduction sends no empathetic re-engagement —
+                        just silence or a generic error. Users who pause once rarely return. A recovery flow with
+                        "resume saving" + showing what they missed could salvage 20–30% of lapsed savers.</p>
+                    <div class="signal-row">
+                        <span class="signal-tag">Event: mandate_failed → time to churn correlation</span>
+                        <span class="signal-tag">% users who resume after first pause</span>
+                        <span class="signal-tag">Support tickets post mandate failure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 05 EXPERIMENTS ── -->
+        <div id="panel-experiments" class="panel">
+            <div class="sec-label">Section 05</div>
+            <div class="sec-title">5 Growth Experiments (A/B Tests)</div>
+
+            <!-- EXP 1 -->
+            <div class="exp-card">
+                <div class="exp-header">
+                    <span class="exp-num">01</span>
+                    <div>
+                        <div class="exp-name">Goal-First Onboarding ("Save for What?")</div>
+                    </div>
+                    <span class="exp-impact">+8–12% Autopay activation</span>
+                </div>
+                <div class="exp-body">
+                    <div class="exp-grid">
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Hypothesis</div>
+                            <p>Users who anchor saving to a named goal (wedding, Diwali, child's education) before
+                                Autopay setup will activate at a higher rate — because commitment has personal meaning,
+                                not just financial logic.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Setup</div>
+                            <p><strong>Control:</strong> Current flow — KYC → amount → Autopay
+                                setup.<br><br><strong>Variant:</strong> Insert a goal-selection screen post-KYC: "What
+                                are you saving for?" (icons: Wedding 💍, Diwali, Education, Emergency, Other).
+                                Auto-calculate: "Save ₹X/day for Y months to reach your goal." Then Autopay setup.
+                                Split: 50/50. Sample: 50K new users/cohort.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Expected Outcome</div>
+                            <p>Goal-first variant shows +8–12% lift in Autopay setup rate. Secondary: goal-setting users
+                                show 15–20% better D30 retention (goal = anchor against churn). Monitor: goal
+                                abandonment rate to ensure screen doesn't add drop-off.</p>
+                        </div>
+                    </div>
+                    <div class="exp-metric">
+                        <span class="exp-metric-label">Metrics:</span>
+                        <span class="metric-pill">autopay_setup_rate</span>
+                        <span class="metric-pill">goal_screen_completion_rate</span>
+                        <span class="metric-pill">D30_retention_by_goal_type</span>
+                        <span class="metric-pill">mandate_amount_set</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXP 2 -->
+            <div class="exp-card">
+                <div class="exp-header">
+                    <span class="exp-num">02</span>
+                    <div>
+                        <div class="exp-name">Trust Reframe — "You're Always in Control" Autopay Screen</div>
+                    </div>
+                    <span class="exp-impact">+6–10% mandate completion</span>
+                </div>
+                <div class="exp-body">
+                    <div class="exp-grid">
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Hypothesis</div>
+                            <p>Explicitly addressing the "I'm giving bank access" fear on the Autopay screen — with
+                                clear cancellation copy, a "pause anytime" assurance, and a lock-icon UI — will reduce
+                                psychological barrier and lift mandate completion.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Setup</div>
+                            <p><strong>Control:</strong> Current Autopay screen with standard UPI mandate
+                                UI.<br><br><strong>Variant A:</strong> Add 3 trust bullets below the CTA: "✓ Pause
+                                anytime, no penalty" / "✓ ₹50/day max — you set the limit" / "✓ 12 lakh+ families saving
+                                daily." <strong>Variant B:</strong> Same + add a FAQ toggle "How does Autopay work?"
+                                inline. 3-way split, 30K users each.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Expected Outcome</div>
+                            <p>Variant A: +6–8% mandate completion. Variant B: +4–6% (FAQ adds friction). If social
+                                proof line ("12 lakh families") drives uplift, roll out across all onboarding screens.
+                                Winner becomes default within 3 weeks.</p>
+                        </div>
+                    </div>
+                    <div class="exp-metric">
+                        <span class="exp-metric-label">Metrics:</span>
+                        <span class="metric-pill">mandate_screen_CTR</span>
+                        <span class="metric-pill">mandate_completion_rate</span>
+                        <span class="metric-pill">FAQ_toggle_open_rate</span>
+                        <span class="metric-pill">post_mandate_cancel_rate_D3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXP 3 -->
+            <div class="exp-card">
+                <div class="exp-header">
+                    <span class="exp-num">03</span>
+                    <div>
+                        <div class="exp-name">Salary Day Trigger — Smart Autopay Timing</div>
+                    </div>
+                    <span class="exp-impact">+15–20% D30 retention</span>
+                </div>
+                <div class="exp-body">
+                    <div class="exp-grid">
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Hypothesis</div>
+                            <p>Mandate failures occur most on non-salary days. Users who set Autopay aligned to their
+                                salary credit date will have fewer failed mandates and higher D30 retention than those
+                                on a fixed daily deduction regardless of balance.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Setup</div>
+                            <p><strong>Control:</strong> Autopay defaults to ₹50/day, next day
+                                start.<br><br><strong>Variant:</strong> Ask "When do you get your salary?"
+                                (1st/5th/10th/15th of month or weekly). Adjust Autopay to trigger 1 day after salary.
+                                Also send a "Salary came in! Your gold saved today 🪙" push on that day. 50/50 split,
+                                40K users.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Expected Outcome</div>
+                            <p>Mandate failure rate drops 30–40%. D30 retention improves 15–20% in salary-aligned
+                                cohort. Increased perceived reliability of the product ("it only deducts when I have
+                                money"). Bonus: salary-day push notification becomes highest-open-rate touchpoint.</p>
+                        </div>
+                    </div>
+                    <div class="exp-metric">
+                        <span class="exp-metric-label">Metrics:</span>
+                        <span class="metric-pill">mandate_failure_rate</span>
+                        <span class="metric-pill">D30_retention</span>
+                        <span class="metric-pill">salary_day_push_open_rate</span>
+                        <span class="metric-pill">avg_saving_days_per_month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXP 4 -->
+            <div class="exp-card">
+                <div class="exp-header">
+                    <span class="exp-num">04</span>
+                    <div>
+                        <div class="exp-name">Saving Streak + Loss Aversion Notification</div>
+                    </div>
+                    <span class="exp-impact">+10–15% D7 → D30 retention</span>
+                </div>
+                <div class="exp-body">
+                    <div class="exp-grid">
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Hypothesis</div>
+                            <p>Users with a visible streak counter and loss-aversion nudges ("Your 6-day saving streak
+                                ends tonight!") will open the app more frequently and maintain their Autopay longer than
+                                users with no streak mechanic, because loss aversion > reward motivation for mass India
+                                users.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Setup</div>
+                            <p><strong>Control:</strong> No streak. Current generic push
+                                notifications.<br><br><strong>Variant A:</strong> Streak counter on home screen. D6
+                                evening push: "Don't break your 6-day streak! 🔥 Save today." <strong>Variant
+                                    B:</strong> Streak + quantified loss: "You'll lose 0.02g gold momentum if you pause
+                                today." 3-way split. Run for 60 days, minimum 25K per arm.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Expected Outcome</div>
+                            <p>Variant A: +10% D30 retention vs control. Variant B: +15% (quantified gold loss more
+                                motivating). App open rate D5–D7 increases by 20%+ in streak variants. Monitor: streak
+                                anxiety — ensure it doesn't cause negative sentiment (track uninstall rate).</p>
+                        </div>
+                    </div>
+                    <div class="exp-metric">
+                        <span class="exp-metric-label">Metrics:</span>
+                        <span class="metric-pill">streak_notification_open_rate</span>
+                        <span class="metric-pill">D7_D30_retention_delta</span>
+                        <span class="metric-pill">app_opens_D5-D7</span>
+                        <span class="metric-pill">uninstall_rate_by_variant</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXP 5 -->
+            <div class="exp-card">
+                <div class="exp-header">
+                    <span class="exp-num">05</span>
+                    <div>
+                        <div class="exp-name">Lapsed Saver Re-engagement — "Your Gold Missed You" Flow</div>
+                    </div>
+                    <span class="exp-impact">+20–25% lapsed user reactivation</span>
+                </div>
+                <div class="exp-body">
+                    <div class="exp-grid">
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Hypothesis</div>
+                            <p>Users who experience a mandate failure or pause and receive an empathetic, goal-anchored
+                                re-engagement sequence (not a generic "resume saving" push) within 24 hours will
+                                reactivate at significantly higher rates than those receiving no or generic nudge.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Setup</div>
+                            <p><strong>Trigger:</strong> mandate_failed OR autopay_paused
+                                event.<br><strong>Control:</strong> No action / current generic
+                                push.<br><strong>Variant:</strong> 3-step sequence: (T+2h) WhatsApp: "Your Diwali gold
+                                goal paused. Resume with ₹1 less/day?" → (T+24h) Push: "You were 12 days into your
+                                streak." → (T+72h) SMS: Gold price update + "Prices up 2% this week — resume now?"
+                                Split: 50/50, 20K lapsed users.</p>
+                        </div>
+                        <div class="exp-section">
+                            <div class="exp-sec-label">Expected Outcome</div>
+                            <p>Variant: 20–25% of lapsed users restart Autopay within 7 days vs ~8% control. WhatsApp
+                                step has highest conversion (higher open rate than push). Gold price trigger in SMS is
+                                best timed re-entry hook. Revenue impact: recovering 15K lapsed users/month at ₹50/day
+                                avg = ₹22.5L additional AUM/month.</p>
+                        </div>
+                    </div>
+                    <div class="exp-metric">
+                        <span class="exp-metric-label">Metrics:</span>
+                        <span class="metric-pill">reactivation_rate_D7</span>
+                        <span class="metric-pill">channel_conversion_by_step</span>
+                        <span class="metric-pill">AUM_recovered</span>
+                        <span class="metric-pill">re-churn_rate_after_reactivation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 06 METRICS ── -->
+        <div id="panel-metrics" class="panel">
+            <div class="sec-label">Section 06</div>
+            <div class="sec-title">Key Metrics to Track</div>
+
+            <div class="metric-tier">
+                <div class="tier-label tier-north">⭐ North Star Metric</div>
+                <div class="metric-row">
+                    <span class="metric-name">Active Daily Savers (ADS)</span>
+                    <span class="metric-target">Target: +40%</span>
+                    <span class="metric-note">Users with ≥1 successful Autopay deduction in last 7 days. This is the
+                        single number that ties activation + retention + AUM together.</span>
+                </div>
+            </div>
+
+            <div class="metric-tier">
+                <div class="tier-label tier-activation">🟦 Activation Metrics</div>
+                <div class="metric-row">
+                    <span class="metric-name">Autopay Setup Rate</span>
+                    <span class="metric-target">30% → 42%</span>
+                    <span class="metric-note">% of KYC-completed users who set up at least 1 Autopay mandate. Primary
+                        activation lever.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Time to First Autopay</span>
+                    <span class="metric-target">&lt; 48 hours</span>
+                    <span class="metric-note">Faster activation = higher LTV. Segment by channel (referral vs ad) to
+                        identify high-quality acquisition sources.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Mandate Amount Distribution</span>
+                    <span class="metric-target">Median ≥ ₹50/day</span>
+                    <span class="metric-note">Track if goal-first flow shifts users to higher amounts. Higher amount =
+                        higher AUM impact.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">KYC → First Save Conversion</span>
+                    <span class="metric-target">48% → 58%</span>
+                    <span class="metric-note">First manual save (pre-Autopay) is a strong predictor of Autopay setup. If
+                        this improves, Autopay follows.</span>
+                </div>
+            </div>
+
+            <div class="metric-tier">
+                <div class="tier-label tier-retention">🟩 Retention Metrics</div>
+                <div class="metric-row">
+                    <span class="metric-name">D7 Retention (Autopay active)</span>
+                    <span class="metric-target">21% → 30%</span>
+                    <span class="metric-note">% of Autopay-setup users with successful deduction on Day 7. Lagging
+                        indicator of habit formation.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">D30 Retention</span>
+                    <span class="metric-target">12% → 20%</span>
+                    <span class="metric-note">Most important long-term health metric. 1 month of daily saving ≈ habit
+                        cemented. Segment by goal-set vs no-goal.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Mandate Failure Rate</span>
+                    <span class="metric-target">&lt; 12%</span>
+                    <span class="metric-note">% of daily mandates that fail due to insufficient balance. Salary-aligned
+                        Autopay should reduce this. Proxy for financial stress mismatch.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Lapsed User Reactivation Rate</span>
+                    <span class="metric-target">&gt; 22%</span>
+                    <span class="metric-note">% of paused/failed Autopay users who restart within 14 days. Currently low
+                        — key unlockable with re-engagement flows.</span>
+                </div>
+            </div>
+
+            <div class="metric-tier">
+                <div class="tier-label tier-revenue">🟫 Revenue / LTV Metrics</div>
+                <div class="metric-row">
+                    <span class="metric-name">AUM per Active User</span>
+                    <span class="metric-target">Monthly growth</span>
+                    <span class="metric-note">Average gold balance of active savers. Tied to save amount and streak
+                        length. Higher AUM → higher Gold+ conversion potential.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Gold+ Upgrade Rate (D30+ users)</span>
+                    <span class="metric-target">5% → 15%</span>
+                    <span class="metric-note">% of users with 0.5g+ who activate Gold+ leasing. Big revenue lever —
+                        Gold+ users generate 3–5x more revenue than standard savers.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">6-Month LTV (cohort)</span>
+                    <span class="metric-target">+35% YoY</span>
+                    <span class="metric-note">Total platform revenue per user cohort over 6 months. Activation +
+                        retention improvements compound here.</span>
+                </div>
+            </div>
+
+            <div class="metric-tier">
+                <div class="tier-label tier-health">◻ Health / Quality Metrics</div>
+                <div class="metric-row">
+                    <span class="metric-name">Uninstall Rate D7</span>
+                    <span class="metric-target">&lt; 8%</span>
+                    <span class="metric-note">Monitor during streak/loss-aversion experiments to ensure habit nudges
+                        don't cause negative UX.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Support Ticket Rate (Autopay)</span>
+                    <span class="metric-target">Reduce 30%</span>
+                    <span class="metric-note">Proxy for trust and clarity of the Autopay flow. Trust reframe experiment
+                        should move this.</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-name">Notification CTR by type</span>
+                    <span class="metric-target">Benchmark all</span>
+                    <span class="metric-note">Distinguish: salary-day, streak, re-engagement, Gold+ upsell. Feeds
+                        notification quality scoring to prevent fatigue.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 07 DASHBOARDS ── -->
+        <div id="panel-dashboards" class="panel">
+            <div class="sec-label">Section 07</div>
+            <div class="sec-title">Dashboard Setup — Mixpanel / Amplitude / Metabase</div>
+
+            <div class="dashboard-card">
+                <div class="dash-header">
+                    <span class="dash-tool tool-mixpanel">Mixpanel</span>
+                    <span class="dash-title">Activation Funnel Dashboard</span>
+                </div>
+                <div class="dash-body">
+                    <p style="font-size:12.5px;color:var(--muted);line-height:1.65;">Track the full conversion funnel
+                        from Install → KYC → First Save → Autopay Setup. Use Mixpanel Funnels with date range,
+                        acquisition channel, and city-tier filters. Set up weekly funnel snapshots and alert if any step
+                        drops &gt;5% WoW.</p>
+                    <div class="dash-widgets">
+                        <span class="widget-tag">Funnel: Install → Autopay Setup</span>
+                        <span class="widget-tag">Conversion by acquisition source</span>
+                        <span class="widget-tag">Time-to-autopay distribution</span>
+                        <span class="widget-tag">KYC drop reason breakdown</span>
+                        <span class="widget-tag">Goal-set vs no-goal activation split</span>
+                        <span class="widget-tag">Autopay amount histogram</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="dash-header">
+                    <span class="dash-tool tool-amplitude">Amplitude</span>
+                    <span class="dash-title">Retention & Cohort Dashboard</span>
+                </div>
+                <div class="dash-body">
+                    <p style="font-size:12.5px;color:var(--muted);line-height:1.65;">Amplitude's retention charts and
+                        cohort analysis are ideal for tracking D1/D7/D30/D90 saving streaks. Create behavioral cohorts:
+                        "Set Goal + Autopay" vs "Autopay only" vs "No Autopay" to measure LTV delta. Set up a real-time
+                        alert when D7 retention drops below 18%.</p>
+                    <div class="dash-widgets">
+                        <span class="widget-tag">Retention curve: D1–D90 by cohort</span>
+                        <span class="widget-tag">Behavioral cohort comparison</span>
+                        <span class="widget-tag">Mandate failure → churn correlation</span>
+                        <span class="widget-tag">Streak length vs D30 retention</span>
+                        <span class="widget-tag">Re-engagement sequence conversion</span>
+                        <span class="widget-tag">Notification CTR by user segment</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="dash-header">
+                    <span class="dash-tool tool-metabase">Metabase</span>
+                    <span class="dash-title">Business / AUM Health Dashboard</span>
+                </div>
+                <div class="dash-body">
+                    <p style="font-size:12.5px;color:var(--muted);line-height:1.65;">SQL-driven Metabase dashboard for
+                        weekly leadership reporting. Connect to Jar's data warehouse. Track AUM growth, active saver
+                        count, revenue per cohort, and experiment results. Use for Monday growth reviews — one screen,
+                        all key numbers.</p>
+                    <div class="dash-widgets">
+                        <span class="widget-tag">Daily Active Savers (ADS) trend</span>
+                        <span class="widget-tag">AUM by city tier</span>
+                        <span class="widget-tag">Gold+ conversion rate</span>
+                        <span class="widget-tag">Weekly mandate success rate</span>
+                        <span class="widget-tag">Lapsed user recovery rate</span>
+                        <span class="widget-tag">Experiment variant performance table</span>
+                        <span class="widget-tag">Revenue per active user by cohort</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Event taxonomy — key events to instrument</div>
+                <p style="margin-bottom:8px;">Ensure these events are firing correctly before any experiment launch.
+                    Missing instrumentation is the #1 reason A/B tests produce inconclusive results.</p>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">app_install</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">kyc_completed</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">goal_set</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">first_manual_save</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">autopay_setup_started</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">autopay_mandate_created</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">mandate_deducted_success</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">mandate_failed</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">autopay_paused</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">streak_milestone_reached</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">reengagement_push_opened</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">gold_plus_enrolled</span>
+                    <span class="widget-tag"
+                        style="background:var(--ink);color:var(--gold-light);border-color:var(--ink-soft);">app_uninstalled</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── 08 IMPACT ── -->
+        <div id="panel-impact" class="panel">
+            <div class="sec-label">Section 08</div>
+            <div class="sec-title">Quantified Expected Impact</div>
+
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th>Experiment</th>
+                        <th>Metric Moved</th>
+                        <th>Baseline</th>
+                        <th>Expected Lift</th>
+                        <th>AUM / Revenue Impact</th>
+                        <th>Timeline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>E1: Goal-first onboarding</td>
+                        <td>Autopay setup rate</td>
+                        <td>30%</td>
+                        <td class="up">+8–12%</td>
+                        <td>+80K–120K active savers/month @ ₹50/day avg = +₹12–18Cr AUM over 6mo</td>
+                        <td>3–4 weeks to ship</td>
+                    </tr>
+                    <tr>
+                        <td>E2: Trust reframe on mandate screen</td>
+                        <td>Mandate completion rate</td>
+                        <td>~65%</td>
+                        <td class="up">+6–10%</td>
+                        <td>+40K–60K mandates/month successfully completed; ↓ support tickets 30%</td>
+                        <td>1–2 weeks (copy change)</td>
+                    </tr>
+                    <tr>
+                        <td>E3: Salary-day Autopay timing</td>
+                        <td>D30 retention; mandate failure rate</td>
+                        <td>12% / ~18%</td>
+                        <td class="up">+15–20% / ↓30%</td>
+                        <td>Retaining 15% more D30 users = +₹8–12Cr incremental AUM over cohort lifetime</td>
+                        <td>4–5 weeks (UPI date logic)</td>
+                    </tr>
+                    <tr>
+                        <td>E4: Streak + loss aversion push</td>
+                        <td>D7→D30 retention</td>
+                        <td>~57% survive</td>
+                        <td class="up">+10–15%</td>
+                        <td>Saving 10% more users in D7–D30 window = meaningful LTV uplift, est. +₹5–8Cr/cohort</td>
+                        <td>2–3 weeks</td>
+                    </tr>
+                    <tr>
+                        <td>E5: Lapsed user re-engagement</td>
+                        <td>Reactivation rate (lapsed)</td>
+                        <td>~8%</td>
+                        <td class="up">+20–25%</td>
+                        <td>Recovering 15K–25K lapsed users/month @ ₹50/day = +₹22–37L additional daily AUM</td>
+                        <td>3–4 weeks (WhatsApp + push)</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="3">Combined portfolio impact (all 5 running, 6-month horizon)</td>
+                        <td class="up">2.0–2.5x Active Daily Savers</td>
+                        <td>Est. +₹40–60Cr incremental AUM over 6 months from existing install base</td>
+                        <td>Phased: start E2 (fastest), then E1, E4, E3, E5</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Prioritization logic</div>
+                    <ul>
+                        <li><strong>Week 1–2:</strong> Ship E2 (trust reframe) — pure copy change, no engineering,
+                            immediate mandate lift.</li>
+                        <li><strong>Week 3–5:</strong> Launch E1 (goal-first) — 1 new screen, highest activation impact.
+                        </li>
+                        <li><strong>Week 4–6:</strong> Launch E4 (streak) — push notification logic, moderate eng lift.
+                        </li>
+                        <li><strong>Week 5–7:</strong> Launch E3 (salary timing) — UPI date logic, slightly more
+                            complex.</li>
+                        <li><strong>Week 6–8:</strong> Launch E5 (re-engagement) — WhatsApp + push sequence, highest
+                            async complexity.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-title">Key assumptions & risks</div>
+                    <ul>
+                        <li>Baseline metrics are estimates — actual numbers may shift experiments' priority.</li>
+                        <li>E3 depends on accurate salary-day capture — needs validation (bank statement API or
+                            self-declared).</li>
+                        <li>E4 streak mechanic risk: anxiety → uninstall if poorly calibrated. Must monitor D7 uninstall
+                            rate closely.</li>
+                        <li>E5 WhatsApp channel requires Jar's WABA approval and template pre-approval — lead time 2–3
+                            weeks.</li>
+                        <li>All experiments need minimum 2-week run time and 95% statistical significance before calling
+                            winner.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="problem-block" style="margin-top: 16px;">
+                <p>The underlying insight across all 5 experiments: <em>Jar's problem is not awareness — it's the gap
+                        between intent and habit</em>. Every experiment is designed to shrink that gap by reducing
+                    friction, building trust, adding goal anchors, and catching users before they slip away permanently.
+                </p>
+            </div>
+        </div>
+
+    </div><!-- /content -->
+
+    <div class="case-footer">
+        Growth Case Study · <span>Jar App — Daily Savings Autopay</span> · Associate Growth Manager POV · 2025
+    </div>
+
+    <script>
+        function show(panel) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('panel-' + panel).classList.add('active');
+            event.target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+
+</html>
